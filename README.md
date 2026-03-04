@@ -145,6 +145,63 @@ npm run dev
 
 ---
 
+## Teknora Ecosystem -- Shared Tech Across Projects
+
+FristRadar draws from two sister projects within the Teknora ecosystem: [Invotract](https://github.com/TeknoraOrg/invotract) (invoice extraction API) and Save2Save/MyCareSafe (mobile safety app).
+
+### Cross-Project Tech Stack Comparison
+
+| Layer | FristRadar | Invotract | Save2Save (MyCareSafe) |
+|-------|-----------|-----------|----------------------|
+| **Product** | Mobile app for German government mail deadlines | Headless invoice extraction API | Mobile safety app: check-ins, digital vault, digital will |
+| **Target users** | 83M German citizens | Enterprise: ERP integrators, accounting firms | Individuals + families (safety/care) |
+| **Frontend** | Expo SDK 54 + React Native | None (headless API) | Expo SDK 54 + React Native + Vite landing page |
+| **Backend** | Hono.js on Hetzner VPS | FastAPI (Python 3.12) | Hono.js on Cloudflare Workers |
+| **Database** | Supabase PostgreSQL (Frankfurt) | None (stateless) | Cloudflare D1 (SQLite) via Drizzle ORM |
+| **Auth** | Supabase Auth (JWT, social login) | RSA-signed license keys | Custom JWT (jose) + OTP (email/SMS) |
+| **LLM primary** | Claude Sonnet 4.6 (native PDF) | Claude Sonnet 4.6 (native PDF) | None |
+| **LLM secondary** | Gemini 2.5 Flash (Vertex AI EU) | GPT-4o | None |
+| **LLM self-hosted** | Qwen2.5-VL via Ollama (v2) | Qwen2.5-VL via Ollama (production) | None |
+| **On-device OCR** | expo-text-extractor (ML Kit + Apple Vision) | N/A | N/A |
+| **PDF extraction** | PyMuPDF (fitz) server-side | PyMuPDF (fitz) server-side | N/A |
+| **Document scanning** | react-native-document-scanner-plugin | File upload (multipart) | expo-document-picker, expo-image-picker |
+| **PDF generation** | Typst (DIN 5008 letters) | None | None |
+| **Push** | Expo Push (deadline reminders) | N/A | Expo Push (check-in alerts, escalations) |
+| **Email / SMS** | Not yet | N/A | Resend (email) + Twilio (SMS) |
+| **Calendar** | expo-calendar + .ics export | N/A | N/A |
+| **i18n** | German only (MVP) | N/A | i18next (multi-language) |
+| **Mobile payments** | RevenueCat (App Store + Play Store) | License-based (RSA-signed) | react-native-iap (Apple IAP + Google Play) |
+| **Web payments** | Stripe (SEPA) | Per-domain license | PayPal Subscriptions |
+| **Hosting** | Hetzner VPS (Nuremberg) | Docker Compose / Windows service | Cloudflare Workers (edge) |
+| **CI/CD** | GitHub Actions | Not specified | GitHub Actions + EAS Build (fingerprint caching) |
+| **Monorepo** | No (single demo-app) | No | Yes (pnpm workspaces) |
+| **E2E tests** | Not yet | httpx | Playwright |
+| **Encryption** | Supabase at-rest + TLS | N/A | AES-256-GCM per vault entry (zero-knowledge) |
+| **Privacy** | EU-only (Frankfurt/Nuremberg) | Stateless (no retention) | Cloudflare edge (global) |
+
+### What FristRadar Reuses From Each Project
+
+| Capability | From Invotract | From Save2Save |
+|-----------|---------------|----------------|
+| **LLM multi-backend chain** | Claude --> GPT-4o --> Ollama, pluggable backends | -- |
+| **PyMuPDF smart routing** | Text layer detection, vision vs. text model routing | -- |
+| **Native PDF to LLM** | Claude `document` content type, base64 encoding | -- |
+| **Strict JSON schemas** | `additionalProperties: false`, null for missing fields | -- |
+| **Self-hosted Ollama** | Qwen2.5-VL 7B + Qwen2.5 3B dual-model setup | -- |
+| **Expo + React Native patterns** | -- | Same SDK 54, same Expo Router 6 |
+| **Hono.js backend** | -- | Same framework, proven on Cloudflare Workers |
+| **TanStack Query** | -- | Server state pattern for data fetching/caching |
+| **Push notification escalation** | -- | Expo Push with escalation logic (adaptable for T-7/T-3/T-1 alerts) |
+| **Monorepo structure** | -- | pnpm workspaces with shared types |
+| **EAS Build + fingerprint CI** | -- | Smart native build caching, skip rebuilds for JS-only changes |
+| **OTA updates** | -- | EAS Update for instant patches without app store review |
+| **E2E testing** | -- | Playwright setup for auth/subscription flows |
+| **Zod + OpenAPI** | -- | Auto-generated API docs, runtime validation |
+| **i18n** | -- | i18next setup for future multi-language support |
+| **AES-256-GCM encryption** | -- | Adaptable for storing sensitive government letter data client-side |
+
+---
+
 ## Project Structure
 
 ```

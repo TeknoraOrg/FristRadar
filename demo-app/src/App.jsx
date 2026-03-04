@@ -60,23 +60,23 @@ const DEMO_LETTERS = [
     id: 1,
     absender: "Finanzamt Berlin-Mitte",
     aktenzeichen: "St.-Nr. 21/815/04711",
-    betreff: "Aufforderung zur Abgabe der Einkommensteuererkl\u00E4rung 2024",
+    betreff: "Aufforderung zur Abgabe der Einkommensteuererklärung 2024",
     datum: "05.02.2026",
     frist: "19.03.2026",
     frist_iso: "2026-03-19",
     tage_verbleibend: 15,
     risiko: "hoch",
     erinnerungen: ["2026-03-12", "2026-03-16", "2026-03-18"],
-    zusammenfassung: "Das Finanzamt fordert Sie auf, Ihre Einkommensteuererkl\u00E4rung f\u00FCr das Jahr 2024 einzureichen. Bei Nichtabgabe droht ein Versp\u00E4tungszuschlag.",
-    konsequenz: "Versp\u00E4tungszuschlag ab 0,25 % der festgesetzten Steuer pro Monat, mindestens 25 \u20AC pro Monat. Zus\u00E4tzlich kann ein Zwangsgeld festgesetzt werden.",
+    zusammenfassung: "Das Finanzamt fordert Sie auf, Ihre Einkommensteuererklärung für das Jahr 2024 einzureichen. Bei Nichtabgabe droht ein Verspätungszuschlag.",
+    konsequenz: "Verspätungszuschlag ab 0,25 % der festgesetzten Steuer pro Monat, mindestens 25 € pro Monat. Zusätzlich kann ein Zwangsgeld festgesetzt werden.",
     todos: [
       { schritt: 1, text: "Steuerunterlagen zusammenstellen (Lohnsteuerbescheinigung, Spendenquittungen, Belege)", done: false },
-      { schritt: 2, text: "Steuererkl\u00E4rung \u00FCber ELSTER oder Steuer-Software erstellen", done: false },
-      { schritt: 3, text: "Erkl\u00E4rung elektronisch \u00FCbermitteln oder per Post senden", done: false },
-      { schritt: 4, text: "Eingangsbest\u00E4tigung / Sendeprotokoll sichern", done: false },
+      { schritt: 2, text: "Steuererklärung über ELSTER oder Steuer-Software erstellen", done: false },
+      { schritt: 3, text: "Erklärung elektronisch übermitteln oder per Post senden", done: false },
+      { schritt: 4, text: "Eingangsbestätigung / Sendeprotokoll sichern", done: false },
     ],
     antwort_vorlage: `Max Mustermann
-Musterstra\u00DFe 12
+Musterstraße 12
 10115 Berlin
 
 Finanzamt Berlin-Mitte
@@ -87,92 +87,92 @@ Datum: __.__._____
 
 Steuernummer: 21/815/04711
 
-Betreff: Einkommensteuererkl\u00E4rung 2024
+Betreff: Einkommensteuererklärung 2024
 
 Sehr geehrte Damen und Herren,
 
-in der Anlage \u00FCbersende ich Ihnen meine Einkommensteuererkl\u00E4rung f\u00FCr das Veranlagungsjahr 2024.
+in der Anlage übersende ich Ihnen meine Einkommensteuererklärung für das Veranlagungsjahr 2024.
 
-Ich bitte um Eingangsbest\u00E4tigung.
+Ich bitte um Eingangsbestätigung.
 
-Mit freundlichen Gr\u00FC\u00DFen
+Mit freundlichen Grüßen
 
 
 Max Mustermann
 
 Anlagen:
-- Einkommensteuererkl\u00E4rung 2024
+- Einkommensteuererklärung 2024
 - Lohnsteuerbescheinigung
 - [weitere Belege]`,
-    versand_optionen: ["ELSTER (elektronisch)", "Einschreiben mit R\u00FCckschein", "Pers\u00F6nliche Abgabe mit Empfangsbest\u00E4tigung"],
+    versand_optionen: ["ELSTER (elektronisch)", "Einschreiben mit Rückschein", "Persönliche Abgabe mit Empfangsbestätigung"],
   },
   {
     id: 2,
-    absender: "Bu\u00DFgeldstelle K\u00F6ln",
+    absender: "Bußgeldstelle Köln",
     aktenzeichen: "OWi 2026-KL-00482",
-    betreff: "Anh\u00F6rung im Ordnungswidrigkeitenverfahren \u2013 Geschwindigkeits\u00FCberschreitung",
+    betreff: "Anhörung im Ordnungswidrigkeitenverfahren – Geschwindigkeitsüberschreitung",
     datum: "12.02.2026",
     frist: "26.03.2026",
     frist_iso: "2026-03-26",
     tage_verbleibend: 22,
     risiko: "mittel",
     erinnerungen: ["2026-03-19", "2026-03-23", "2026-03-25"],
-    zusammenfassung: "Ihnen wird eine Geschwindigkeits\u00FCberschreitung von 23 km/h innerorts vorgeworfen. Sie haben die M\u00F6glichkeit, sich innerhalb der Frist zu \u00E4u\u00DFern.",
-    konsequenz: "Ohne Stellungnahme ergeht der Bu\u00DFgeldbescheid in der Regel ohne Ber\u00FCcksichtigung Ihrer Sicht. Bu\u00DFgeld: voraussichtlich 115 \u20AC + 1 Punkt in Flensburg.",
+    zusammenfassung: "Ihnen wird eine Geschwindigkeitsüberschreitung von 23 km/h innerorts vorgeworfen. Sie haben die Möglichkeit, sich innerhalb der Frist zu äußern.",
+    konsequenz: "Ohne Stellungnahme ergeht der Bußgeldbescheid in der Regel ohne Berücksichtigung Ihrer Sicht. Bußgeld: voraussichtlich 115 € + 1 Punkt in Flensburg.",
     todos: [
-      { schritt: 1, text: "Anh\u00F6rungsbogen sorgf\u00E4ltig lesen, Tatvorwurf pr\u00FCfen", done: false },
+      { schritt: 1, text: "Anhörungsbogen sorgfältig lesen, Tatvorwurf prüfen", done: false },
       { schritt: 2, text: "Entscheiden: Einspruch oder Zahlung", done: false },
       { schritt: 3, text: "Bei Einspruch: schriftliche Stellungnahme verfassen", done: false },
       { schritt: 4, text: "Fristgerecht absenden und Versandnachweis sichern", done: false },
     ],
     antwort_vorlage: `Max Mustermann
-Musterstra\u00DFe 12
-50667 K\u00F6ln
+Musterstraße 12
+50667 Köln
 
-Bu\u00DFgeldstelle der Stadt K\u00F6ln
-50679 K\u00F6ln
+Bußgeldstelle der Stadt Köln
+50679 Köln
 
 Datum: __.__._____
 
 Aktenzeichen: OWi 2026-KL-00482
 
-Betreff: Stellungnahme zum Anh\u00F6rungsbogen
+Betreff: Stellungnahme zum Anhörungsbogen
 
 Sehr geehrte Damen und Herren,
 
 hiermit nehme ich zu dem oben genannten Verfahren wie folgt Stellung:
 
-[Ihre Stellungnahme hier einf\u00FCgen]
+[Ihre Stellungnahme hier einfügen]
 
-Ich bitte um Ber\u00FCcksichtigung meiner Angaben.
+Ich bitte um Berücksichtigung meiner Angaben.
 
-Mit freundlichen Gr\u00FC\u00DFen
+Mit freundlichen Grüßen
 
 
 Max Mustermann`,
-    versand_optionen: ["Einschreiben (Einwurf)", "Fax mit Sendebericht", "Pers\u00F6nliche Abgabe mit Empfangsbest\u00E4tigung"],
+    versand_optionen: ["Einschreiben (Einwurf)", "Fax mit Sendebericht", "Persönliche Abgabe mit Empfangsbestätigung"],
   },
   {
     id: 3,
-    absender: "Jobcenter M\u00FCnchen",
+    absender: "Jobcenter München",
     aktenzeichen: "JC-M-2026-09831",
-    betreff: "Aufforderung zur Mitwirkung \u2013 Weiterbewilligungsantrag",
+    betreff: "Aufforderung zur Mitwirkung – Weiterbewilligungsantrag",
     datum: "20.02.2026",
     frist: "10.04.2026",
     frist_iso: "2026-04-10",
     tage_verbleibend: 37,
     risiko: "niedrig",
     erinnerungen: ["2026-04-03", "2026-04-07", "2026-04-09"],
-    zusammenfassung: "Das Jobcenter fordert Sie auf, den Weiterbewilligungsantrag f\u00FCr B\u00FCrgergeld einzureichen, inkl. aktueller Einkommensnachweise.",
-    konsequenz: "Bei Fristvers\u00E4umnis droht eine Leistungsk\u00FCrzung oder vorl\u00E4ufige Einstellung der Zahlungen.",
+    zusammenfassung: "Das Jobcenter fordert Sie auf, den Weiterbewilligungsantrag für Bürgergeld einzureichen, inkl. aktueller Einkommensnachweise.",
+    konsequenz: "Bei Fristversäumnis droht eine Leistungskürzung oder vorläufige Einstellung der Zahlungen.",
     todos: [
-      { schritt: 1, text: "Weiterbewilligungsantrag ausf\u00FCllen", done: false },
-      { schritt: 2, text: "Einkommensnachweise der letzten 3 Monate beif\u00FCgen", done: false },
+      { schritt: 1, text: "Weiterbewilligungsantrag ausfüllen", done: false },
+      { schritt: 2, text: "Einkommensnachweise der letzten 3 Monate beifügen", done: false },
       { schritt: 3, text: "Mietbescheinigung aktualisieren", done: false },
-      { schritt: 4, text: "Antrag pers\u00F6nlich oder per Post einreichen", done: false },
+      { schritt: 4, text: "Antrag persönlich oder per Post einreichen", done: false },
     ],
-    antwort_vorlage: `Max Mustermann\nMusterstra\u00DFe 12\n80331 M\u00FCnchen\n\nJobcenter M\u00FCnchen\n80333 M\u00FCnchen\n\nDatum: __.__._____\n\nAktenzeichen: JC-M-2026-09831\n\nBetreff: Weiterbewilligungsantrag\n\nSehr geehrte Damen und Herren,\n\nanbei \u00FCbersende ich Ihnen den ausgef\u00FCllten Weiterbewilligungsantrag nebst Anlagen.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann`,
-    versand_optionen: ["Pers\u00F6nliche Abgabe mit Empfangsbest\u00E4tigung", "Einschreiben mit R\u00FCckschein"],
+    antwort_vorlage: `Max Mustermann\nMusterstraße 12\n80331 München\n\nJobcenter München\n80333 München\n\nDatum: __.__._____\n\nAktenzeichen: JC-M-2026-09831\n\nBetreff: Weiterbewilligungsantrag\n\nSehr geehrte Damen und Herren,\n\nanbei übersende ich Ihnen den ausgefüllten Weiterbewilligungsantrag nebst Anlagen.\n\nMit freundlichen Grüßen\n\nMax Mustermann`,
+    versand_optionen: ["Persönliche Abgabe mit Empfangsbestätigung", "Einschreiben mit Rückschein"],
   },
 ];
 
@@ -182,43 +182,43 @@ const BACKLOG_LETTERS = [
     id: 101,
     absender: "Amtsgericht Hamburg",
     aktenzeichen: "AG HH 341 C 1029/26",
-    betreff: "Mahnbescheid \u2013 Forderung aus Kaufvertrag",
+    betreff: "Mahnbescheid – Forderung aus Kaufvertrag",
     datum: "01.03.2026",
     frist: "15.03.2026",
     frist_iso: "2026-03-15",
     tage_verbleibend: 11,
     risiko: "hoch",
     erinnerungen: ["2026-03-08", "2026-03-12", "2026-03-14"],
-    zusammenfassung: "Ihnen wurde ein Mahnbescheid \u00FCber 1.240 \u20AC zugestellt. Sie k\u00F6nnen innerhalb von zwei Wochen Widerspruch einlegen.",
-    konsequenz: "Ohne Widerspruch wird der Mahnbescheid rechtskr\u00E4ftig. Der Gl\u00E4ubiger kann dann einen Vollstreckungsbescheid beantragen.",
+    zusammenfassung: "Ihnen wurde ein Mahnbescheid über 1.240 € zugestellt. Sie können innerhalb von zwei Wochen Widerspruch einlegen.",
+    konsequenz: "Ohne Widerspruch wird der Mahnbescheid rechtskräftig. Der Gläubiger kann dann einen Vollstreckungsbescheid beantragen.",
     todos: [
-      { schritt: 1, text: "Mahnbescheid pr\u00FCfen: Forderung berechtigt?", done: false },
+      { schritt: 1, text: "Mahnbescheid prüfen: Forderung berechtigt?", done: false },
       { schritt: 2, text: "Bei Einwand: Widerspruch beim Amtsgericht einlegen", done: false },
       { schritt: 3, text: "Widerspruch fristgerecht absenden", done: false },
     ],
-    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n20095 Hamburg\n\nAmtsgericht Hamburg\n20355 Hamburg\n\nDatum: __.__._____\n\nAktenzeichen: 341 C 1029/26\n\nBetreff: Widerspruch gegen Mahnbescheid\n\nSehr geehrte Damen und Herren,\n\nhiermit lege ich gegen den Mahnbescheid vom 01.03.2026 fristgerecht Widerspruch ein.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
-    versand_optionen: ["Einschreiben mit R\u00FCckschein", "Fax mit Sendebericht"],
+    antwort_vorlage: "Max Mustermann\nMusterstraße 12\n20095 Hamburg\n\nAmtsgericht Hamburg\n20355 Hamburg\n\nDatum: __.__._____\n\nAktenzeichen: 341 C 1029/26\n\nBetreff: Widerspruch gegen Mahnbescheid\n\nSehr geehrte Damen und Herren,\n\nhiermit lege ich gegen den Mahnbescheid vom 01.03.2026 fristgerecht Widerspruch ein.\n\nMit freundlichen Grüßen\n\nMax Mustermann",
+    versand_optionen: ["Einschreiben mit Rückschein", "Fax mit Sendebericht"],
   },
   {
     id: 102,
     absender: "Rundfunkbeitrag (ARD ZDF)",
     aktenzeichen: "RB-2026-4839201",
-    betreff: "Festsetzungsbescheid \u2013 R\u00FCckst\u00E4ndige Rundfunkbeitr\u00E4ge",
+    betreff: "Festsetzungsbescheid – Rückständige Rundfunkbeiträge",
     datum: "25.02.2026",
     frist: "25.03.2026",
     frist_iso: "2026-03-25",
     tage_verbleibend: 21,
     risiko: "mittel",
     erinnerungen: ["2026-03-18", "2026-03-22", "2026-03-24"],
-    zusammenfassung: "Der Beitragsservice fordert r\u00FCckst\u00E4ndige Rundfunkbeitr\u00E4ge in H\u00F6he von 220,50 \u20AC zzgl. S\u00E4umniszuschlag.",
-    konsequenz: "Bei Nichtzahlung wird der Bescheid vollstreckbar. Pfandung oder Gerichtsvollzieher m\u00F6glich.",
+    zusammenfassung: "Der Beitragsservice fordert rückständige Rundfunkbeiträge in Höhe von 220,50 € zzgl. Säumniszuschlag.",
+    konsequenz: "Bei Nichtzahlung wird der Bescheid vollstreckbar. Pfandung oder Gerichtsvollzieher möglich.",
     todos: [
-      { schritt: 1, text: "Bescheid pr\u00FCfen: Zeitraum und Betrag korrekt?", done: false },
+      { schritt: 1, text: "Bescheid prüfen: Zeitraum und Betrag korrekt?", done: false },
       { schritt: 2, text: "Bei Fehler: Widerspruch innerhalb 4 Wochen einlegen", done: false },
       { schritt: 3, text: "Zahlung leisten oder Ratenzahlung beantragen", done: false },
     ],
-    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n10115 Berlin\n\nARD ZDF Deutschlandradio Beitragsservice\n50656 K\u00F6ln\n\nDatum: __.__._____\n\nBeitragsnummer: RB-2026-4839201\n\nBetreff: Widerspruch gegen Festsetzungsbescheid\n\nSehr geehrte Damen und Herren,\n\n[Ihr Widerspruch hier]\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
-    versand_optionen: ["Einschreiben (Einwurf)", "Online \u00FCber Beitragsservice-Portal"],
+    antwort_vorlage: "Max Mustermann\nMusterstraße 12\n10115 Berlin\n\nARD ZDF Deutschlandradio Beitragsservice\n50656 Köln\n\nDatum: __.__._____\n\nBeitragsnummer: RB-2026-4839201\n\nBetreff: Widerspruch gegen Festsetzungsbescheid\n\nSehr geehrte Damen und Herren,\n\n[Ihr Widerspruch hier]\n\nMit freundlichen Grüßen\n\nMax Mustermann",
+    versand_optionen: ["Einschreiben (Einwurf)", "Online über Beitragsservice-Portal"],
   },
   {
     id: 103,
@@ -231,121 +231,121 @@ const BACKLOG_LETTERS = [
     tage_verbleibend: 27,
     risiko: "mittel",
     erinnerungen: ["2026-03-24", "2026-03-28", "2026-03-30"],
-    zusammenfassung: "Ihre Hauptuntersuchung (T\u00DCV) ist seit 2 Monaten \u00FCberf\u00E4llig. Legen Sie die HU-Bescheinigung vor, andernfalls droht Stilllegung.",
-    konsequenz: "Zwangsstilllegung des Fahrzeugs, Bu\u00DFgeld bis 60 \u20AC, Eintrag in Flensburg.",
+    zusammenfassung: "Ihre Hauptuntersuchung (TÜV) ist seit 2 Monaten überfällig. Legen Sie die HU-Bescheinigung vor, andernfalls droht Stilllegung.",
+    konsequenz: "Zwangsstilllegung des Fahrzeugs, Bußgeld bis 60 €, Eintrag in Flensburg.",
     todos: [
-      { schritt: 1, text: "T\u00DCV-Termin vereinbaren", done: false },
+      { schritt: 1, text: "TÜV-Termin vereinbaren", done: false },
       { schritt: 2, text: "Fahrzeug zur HU bringen", done: false },
       { schritt: 3, text: "HU-Bescheinigung bei der Zulassungsstelle vorlegen", done: false },
     ],
-    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n70173 Stuttgart\n\nZulassungsstelle Stuttgart\n70174 Stuttgart\n\nDatum: __.__._____\n\nAktenzeichen: ZS-S-2026-07744\n\nBetreff: Vorlage HU-Bescheinigung\n\nSehr geehrte Damen und Herren,\n\nin der Anlage \u00FCbersende ich die HU-Bescheinigung meines Fahrzeugs.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
-    versand_optionen: ["Pers\u00F6nliche Abgabe", "Einschreiben (Einwurf)"],
+    antwort_vorlage: "Max Mustermann\nMusterstraße 12\n70173 Stuttgart\n\nZulassungsstelle Stuttgart\n70174 Stuttgart\n\nDatum: __.__._____\n\nAktenzeichen: ZS-S-2026-07744\n\nBetreff: Vorlage HU-Bescheinigung\n\nSehr geehrte Damen und Herren,\n\nin der Anlage übersende ich die HU-Bescheinigung meines Fahrzeugs.\n\nMit freundlichen Grüßen\n\nMax Mustermann",
+    versand_optionen: ["Persönliche Abgabe", "Einschreiben (Einwurf)"],
   },
   {
     id: 104,
-    absender: "Auslanderb\u00FCro Frankfurt",
+    absender: "Auslanderbüro Frankfurt",
     aktenzeichen: "ABH-FFM-2026-22190",
-    betreff: "Verl\u00E4ngerung der Aufenthaltserlaubnis \u2013 Mitwirkungspflicht",
+    betreff: "Verlängerung der Aufenthaltserlaubnis – Mitwirkungspflicht",
     datum: "03.03.2026",
     frist: "17.04.2026",
     frist_iso: "2026-04-17",
     tage_verbleibend: 44,
     risiko: "hoch",
     erinnerungen: ["2026-04-10", "2026-04-14", "2026-04-16"],
-    zusammenfassung: "Sie werden aufgefordert, Unterlagen zur Verl\u00E4ngerung Ihrer Aufenthaltserlaubnis einzureichen (Arbeitsvertrag, Mietvertrag, Krankenversicherungsnachweis).",
-    konsequenz: "Ohne rechtzeitige Verl\u00E4ngerung kann eine Duldung oder Ausreisepflicht eintreten.",
+    zusammenfassung: "Sie werden aufgefordert, Unterlagen zur Verlängerung Ihrer Aufenthaltserlaubnis einzureichen (Arbeitsvertrag, Mietvertrag, Krankenversicherungsnachweis).",
+    konsequenz: "Ohne rechtzeitige Verlängerung kann eine Duldung oder Ausreisepflicht eintreten.",
     todos: [
       { schritt: 1, text: "Arbeitsvertrag und Gehaltsabrechnungen zusammenstellen", done: false },
       { schritt: 2, text: "Mietvertrag und Anmeldebestatigung kopieren", done: false },
       { schritt: 3, text: "Krankenversicherungsnachweis besorgen", done: false },
-      { schritt: 4, text: "Pers\u00F6nlich beim Ausl\u00E4nderamt vorsprechen", done: false },
+      { schritt: 4, text: "Persönlich beim Ausländeramt vorsprechen", done: false },
     ],
-    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n60311 Frankfurt\n\nAusl\u00E4nderbeh\u00F6rde Frankfurt\n60313 Frankfurt\n\nDatum: __.__._____\n\nAktenzeichen: ABH-FFM-2026-22190\n\nBetreff: Verl\u00E4ngerung Aufenthaltserlaubnis\n\nSehr geehrte Damen und Herren,\n\nanbei die angeforderten Unterlagen.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
-    versand_optionen: ["Pers\u00F6nliche Abgabe mit Empfangsbest\u00E4tigung"],
+    antwort_vorlage: "Max Mustermann\nMusterstraße 12\n60311 Frankfurt\n\nAusländerbehörde Frankfurt\n60313 Frankfurt\n\nDatum: __.__._____\n\nAktenzeichen: ABH-FFM-2026-22190\n\nBetreff: Verlängerung Aufenthaltserlaubnis\n\nSehr geehrte Damen und Herren,\n\nanbei die angeforderten Unterlagen.\n\nMit freundlichen Grüßen\n\nMax Mustermann",
+    versand_optionen: ["Persönliche Abgabe mit Empfangsbestätigung"],
   },
   {
     id: 105,
-    absender: "Finanzamt D\u00FCsseldorf-S\u00FCd",
+    absender: "Finanzamt Düsseldorf-Süd",
     aktenzeichen: "St.-Nr. 133/5214/0815",
-    betreff: "Umsatzsteuer-Voranmeldung Q4/2025 \u2013 Erinnerung",
+    betreff: "Umsatzsteuer-Voranmeldung Q4/2025 – Erinnerung",
     datum: "02.03.2026",
     frist: "10.04.2026",
     frist_iso: "2026-04-10",
     tage_verbleibend: 37,
     risiko: "hoch",
     erinnerungen: ["2026-04-03", "2026-04-07", "2026-04-09"],
-    zusammenfassung: "Die Umsatzsteuer-Voranmeldung f\u00FCr Q4/2025 wurde noch nicht eingereicht. Bei weiterem Vers\u00E4umnis wird ein Versp\u00E4tungszuschlag festgesetzt.",
-    konsequenz: "Versp\u00E4tungszuschlag bis zu 10 % der angemeldeten Steuer. Zwangsgeld bis 25.000 \u20AC m\u00F6glich.",
+    zusammenfassung: "Die Umsatzsteuer-Voranmeldung für Q4/2025 wurde noch nicht eingereicht. Bei weiterem Versäumnis wird ein Verspätungszuschlag festgesetzt.",
+    konsequenz: "Verspätungszuschlag bis zu 10 % der angemeldeten Steuer. Zwangsgeld bis 25.000 € möglich.",
     todos: [
-      { schritt: 1, text: "Buchhaltung f\u00FCr Q4/2025 abschlie\u00DFen", done: false },
-      { schritt: 2, text: "Umsatzsteuer-Voranmeldung \u00FCber ELSTER erstellen", done: false },
-      { schritt: 3, text: "Voranmeldung elektronisch \u00FCbermitteln", done: false },
+      { schritt: 1, text: "Buchhaltung für Q4/2025 abschließen", done: false },
+      { schritt: 2, text: "Umsatzsteuer-Voranmeldung über ELSTER erstellen", done: false },
+      { schritt: 3, text: "Voranmeldung elektronisch übermitteln", done: false },
     ],
-    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n40215 D\u00FCsseldorf\n\nFinanzamt D\u00FCsseldorf-S\u00FCd\n40210 D\u00FCsseldorf\n\nDatum: __.__._____\n\nSteuernummer: 133/5214/0815\n\nBetreff: Umsatzsteuer-Voranmeldung Q4/2025\n\nSehr geehrte Damen und Herren,\n\nin der Anlage die Umsatzsteuer-Voranmeldung f\u00FCr Q4/2025.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
+    antwort_vorlage: "Max Mustermann\nMusterstraße 12\n40215 Düsseldorf\n\nFinanzamt Düsseldorf-Süd\n40210 Düsseldorf\n\nDatum: __.__._____\n\nSteuernummer: 133/5214/0815\n\nBetreff: Umsatzsteuer-Voranmeldung Q4/2025\n\nSehr geehrte Damen und Herren,\n\nin der Anlage die Umsatzsteuer-Voranmeldung für Q4/2025.\n\nMit freundlichen Grüßen\n\nMax Mustermann",
     versand_optionen: ["ELSTER (elektronisch)"],
   },
   {
     id: 106,
-    absender: "Ordnungsamt Berlin-Neuk\u00F6lln",
+    absender: "Ordnungsamt Berlin-Neukölln",
     aktenzeichen: "OA-NK-2026-03991",
-    betreff: "Verwarnung wegen Ruhest\u00F6rung \u2013 Stellungnahme",
+    betreff: "Verwarnung wegen Ruhestörung – Stellungnahme",
     datum: "27.02.2026",
     frist: "20.03.2026",
     frist_iso: "2026-03-20",
     tage_verbleibend: 16,
     risiko: "niedrig",
     erinnerungen: ["2026-03-13", "2026-03-17", "2026-03-19"],
-    zusammenfassung: "Gegen Sie liegt eine Beschwerde wegen Ruhest\u00F6rung vor. Sie haben Gelegenheit zur Stellungnahme.",
-    konsequenz: "Bei wiederholten Verst\u00F6\u00DFen Bu\u00DFgeld bis 5.000 \u20AC. Erste Verwarnung bleibt ohne Bu\u00DFgeld bei Stellungnahme.",
+    zusammenfassung: "Gegen Sie liegt eine Beschwerde wegen Ruhestörung vor. Sie haben Gelegenheit zur Stellungnahme.",
+    konsequenz: "Bei wiederholten Verstößen Bußgeld bis 5.000 €. Erste Verwarnung bleibt ohne Bußgeld bei Stellungnahme.",
     todos: [
-      { schritt: 1, text: "Sachverhalt pr\u00FCfen: Datum und Uhrzeit des Vorfalls", done: false },
+      { schritt: 1, text: "Sachverhalt prüfen: Datum und Uhrzeit des Vorfalls", done: false },
       { schritt: 2, text: "Stellungnahme verfassen", done: false },
       { schritt: 3, text: "Fristgerecht einreichen", done: false },
     ],
-    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n12043 Berlin\n\nOrdnungsamt Berlin-Neuk\u00F6lln\n12040 Berlin\n\nDatum: __.__._____\n\nAktenzeichen: OA-NK-2026-03991\n\nBetreff: Stellungnahme zur Verwarnung\n\nSehr geehrte Damen und Herren,\n\n[Ihre Stellungnahme]\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
-    versand_optionen: ["Einschreiben (Einwurf)", "Pers\u00F6nliche Abgabe"],
+    antwort_vorlage: "Max Mustermann\nMusterstraße 12\n12043 Berlin\n\nOrdnungsamt Berlin-Neukölln\n12040 Berlin\n\nDatum: __.__._____\n\nAktenzeichen: OA-NK-2026-03991\n\nBetreff: Stellungnahme zur Verwarnung\n\nSehr geehrte Damen und Herren,\n\n[Ihre Stellungnahme]\n\nMit freundlichen Grüßen\n\nMax Mustermann",
+    versand_optionen: ["Einschreiben (Einwurf)", "Persönliche Abgabe"],
   },
   {
     id: 107,
     absender: "Krankenkasse AOK Bayern",
     aktenzeichen: "AOK-BY-2026-881204",
-    betreff: "Beitragsr\u00FCckstand \u2013 Zahlungsaufforderung",
+    betreff: "Beitragsrückstand – Zahlungsaufforderung",
     datum: "04.03.2026",
     frist: "18.03.2026",
     frist_iso: "2026-03-18",
     tage_verbleibend: 14,
     risiko: "hoch",
     erinnerungen: ["2026-03-11", "2026-03-15", "2026-03-17"],
-    zusammenfassung: "R\u00FCckst\u00E4ndige Krankenversicherungsbeitr\u00E4ge in H\u00F6he von 847,20 \u20AC. Zahlungsfrist bereits einmal verl\u00E4ngert.",
-    konsequenz: "S\u00E4umniszuschlag 1 % pro Monat. Leistungseinschr\u00E4nkung auf Notfallversorgung bei weiterem Verzug.",
+    zusammenfassung: "Rückständige Krankenversicherungsbeiträge in Höhe von 847,20 €. Zahlungsfrist bereits einmal verlängert.",
+    konsequenz: "Säumniszuschlag 1 % pro Monat. Leistungseinschränkung auf Notfallversorgung bei weiterem Verzug.",
     todos: [
-      { schritt: 1, text: "Kontostand pr\u00FCfen und Zahlung veranlassen", done: false },
-      { schritt: 2, text: "Falls Zahlung nicht m\u00F6glich: Ratenzahlung beantragen", done: false },
-      { schritt: 3, text: "Zahlungseingang best\u00E4tigen lassen", done: false },
+      { schritt: 1, text: "Kontostand prüfen und Zahlung veranlassen", done: false },
+      { schritt: 2, text: "Falls Zahlung nicht möglich: Ratenzahlung beantragen", done: false },
+      { schritt: 3, text: "Zahlungseingang bestätigen lassen", done: false },
     ],
-    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n80331 M\u00FCnchen\n\nAOK Bayern\n80788 M\u00FCnchen\n\nDatum: __.__._____\n\nVersichertennummer: AOK-BY-2026-881204\n\nBetreff: Ratenzahlung Beitragsr\u00FCckstand\n\nSehr geehrte Damen und Herren,\n\nich bitte um Einr\u00E4umung einer Ratenzahlung.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
-    versand_optionen: ["Einschreiben mit R\u00FCckschein", "Online \u00FCber Meine AOK"],
+    antwort_vorlage: "Max Mustermann\nMusterstraße 12\n80331 München\n\nAOK Bayern\n80788 München\n\nDatum: __.__._____\n\nVersichertennummer: AOK-BY-2026-881204\n\nBetreff: Ratenzahlung Beitragsrückstand\n\nSehr geehrte Damen und Herren,\n\nich bitte um Einräumung einer Ratenzahlung.\n\nMit freundlichen Grüßen\n\nMax Mustermann",
+    versand_optionen: ["Einschreiben mit Rückschein", "Online über Meine AOK"],
   },
   {
     id: 108,
     absender: "Bauamt Leipzig",
     aktenzeichen: "BA-L-2026-05520",
-    betreff: "Aufforderung zum R\u00FCckbau \u2013 ungenehmigter Carport",
+    betreff: "Aufforderung zum Rückbau – ungenehmigter Carport",
     datum: "26.02.2026",
     frist: "26.04.2026",
     frist_iso: "2026-04-26",
     tage_verbleibend: 53,
     risiko: "niedrig",
     erinnerungen: ["2026-04-19", "2026-04-23", "2026-04-25"],
-    zusammenfassung: "Das Bauamt stellt fest, dass ein Carport ohne Baugenehmigung errichtet wurde. Sie werden zum R\u00FCckbau oder zur nachtr\u00E4glichen Genehmigung aufgefordert.",
-    konsequenz: "Zwangsgeld bis 10.000 \u20AC bei Nichtbefolgung. Ersatzvornahme (R\u00FCckbau auf Ihre Kosten) m\u00F6glich.",
+    zusammenfassung: "Das Bauamt stellt fest, dass ein Carport ohne Baugenehmigung errichtet wurde. Sie werden zum Rückbau oder zur nachträglichen Genehmigung aufgefordert.",
+    konsequenz: "Zwangsgeld bis 10.000 € bei Nichtbefolgung. Ersatzvornahme (Rückbau auf Ihre Kosten) möglich.",
     todos: [
-      { schritt: 1, text: "Pr\u00FCfen ob nachtr\u00E4gliche Genehmigung m\u00F6glich", done: false },
-      { schritt: 2, text: "Bauantrag vorbereiten oder R\u00FCckbau planen", done: false },
+      { schritt: 1, text: "Prüfen ob nachträgliche Genehmigung möglich", done: false },
+      { schritt: 2, text: "Bauantrag vorbereiten oder Rückbau planen", done: false },
       { schritt: 3, text: "Stellungnahme fristgerecht einreichen", done: false },
     ],
-    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n04109 Leipzig\n\nBauamt Leipzig\n04092 Leipzig\n\nDatum: __.__._____\n\nAktenzeichen: BA-L-2026-05520\n\nBetreff: Stellungnahme zum R\u00FCckbaubescheid\n\nSehr geehrte Damen und Herren,\n\n[Ihre Stellungnahme]\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
-    versand_optionen: ["Einschreiben mit R\u00FCckschein", "Pers\u00F6nliche Abgabe"],
+    antwort_vorlage: "Max Mustermann\nMusterstraße 12\n04109 Leipzig\n\nBauamt Leipzig\n04092 Leipzig\n\nDatum: __.__._____\n\nAktenzeichen: BA-L-2026-05520\n\nBetreff: Stellungnahme zum Rückbaubescheid\n\nSehr geehrte Damen und Herren,\n\n[Ihre Stellungnahme]\n\nMit freundlichen Grüßen\n\nMax Mustermann",
+    versand_optionen: ["Einschreiben mit Rückschein", "Persönliche Abgabe"],
   },
 ];
 
@@ -361,7 +361,7 @@ function Header({ onBack, title }) {
   return (
     <div style={{ display: "flex", alignItems: "center", padding: "16px 20px", borderBottom: "1px solid #E5E5E5", background: "#FAFAFA" }}>
       {onBack && (
-        <button onClick={onBack} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", marginRight: 12, color: "#1A1A1A", padding: 4 }}>{"\u2190"}</button>
+        <button onClick={onBack} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", marginRight: 12, color: "#1A1A1A", padding: 4 }}>{"←"}</button>
       )}
       <span style={{ fontSize: 17, fontWeight: 600, color: "#1A1A1A", letterSpacing: "-0.2px" }}>{title}</span>
     </div>
@@ -392,9 +392,9 @@ function CountdownBadge({ tage }) {
 
 function BottomNav({ activeTab, onTabChange }) {
   const tabs = [
-    { key: "briefe", label: "Briefe", icon: "\uD83D\uDCE8" },
-    { key: "kalender", label: "Kalender", icon: "\uD83D\uDCC5" },
-    { key: "nachweise", label: "Nachweise", icon: "\uD83D\uDCC1" },
+    { key: "briefe", label: "Briefe", icon: "��" },
+    { key: "kalender", label: "Kalender", icon: "��" },
+    { key: "nachweise", label: "Nachweise", icon: "��" },
   ];
   return (
     <div style={{ borderTop: "1px solid #E5E5E5", padding: "10px 20px", display: "flex", justifyContent: "space-around", background: "#FAFAFA", flexShrink: 0 }}>
@@ -425,7 +425,7 @@ function HomeScreen({ onScan, onSelectLetter, letters }) {
           </div>
           <span style={{ fontSize: 22, fontWeight: 700, color: "#1A1A1A", letterSpacing: "-0.5px" }}>FristRadar</span>
         </div>
-        <p style={{ fontSize: 13, color: "#666", margin: "6px 0 0 0" }}>Beh\u00F6rdenpost im Griff. Fristen erkennen, handeln, nachweisen.</p>
+        <p style={{ fontSize: 13, color: "#666", margin: "6px 0 0 0" }}>Behördenpost im Griff. Fristen erkennen, handeln, nachweisen.</p>
       </div>
 
       <div style={{ padding: "20px 20px 8px" }}>
@@ -524,9 +524,9 @@ function CalendarScreen({ letters, onSelectLetter }) {
     <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
       <div style={{ padding: "20px 20px 12px", background: "#FAFAFA", borderBottom: "1px solid #E5E5E5" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <button onClick={prevMonth} style={{ background: "none", border: "none", fontSize: 22, cursor: "pointer", padding: "4px 12px", color: "#1A1A1A" }}>{"\u2039"}</button>
+          <button onClick={prevMonth} style={{ background: "none", border: "none", fontSize: 22, cursor: "pointer", padding: "4px 12px", color: "#1A1A1A" }}>{"‹"}</button>
           <span style={{ fontSize: 17, fontWeight: 700, color: "#1A1A1A", textTransform: "capitalize" }}>{monthName}</span>
-          <button onClick={nextMonth} style={{ background: "none", border: "none", fontSize: 22, cursor: "pointer", padding: "4px 12px", color: "#1A1A1A" }}>{"\u203A"}</button>
+          <button onClick={nextMonth} style={{ background: "none", border: "none", fontSize: 22, cursor: "pointer", padding: "4px 12px", color: "#1A1A1A" }}>{"›"}</button>
         </div>
       </div>
 
@@ -672,7 +672,7 @@ function NachweiseScreen({ letters, onSelectLetter }) {
     <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
       <div style={{ padding: "20px 20px 14px", background: "#FAFAFA", borderBottom: "1px solid #E5E5E5" }}>
         <span style={{ fontSize: 17, fontWeight: 700, color: "#1A1A1A" }}>Nachweise</span>
-        <p style={{ fontSize: 13, color: "#666", margin: "4px 0 0" }}>Versandnachweise f\u00FCr Ihre Beh\u00F6rdenpost</p>
+        <p style={{ fontSize: 13, color: "#666", margin: "4px 0 0" }}>Versandnachweise für Ihre Behördenpost</p>
       </div>
 
       <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px 20px" }}>
@@ -713,7 +713,7 @@ function NachweiseScreen({ letters, onSelectLetter }) {
                       <div style={{
                         width: 32, height: 32, background: "#F0F0F0", borderRadius: 6,
                         display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14,
-                      }}>{"\uD83D\uDCCE"}</div>
+                      }}>{"��"}</div>
                       <div>
                         <div style={{ fontWeight: 600, color: "#1A1A1A" }}>{b.type}</div>
                         <div style={{ color: "#999" }}>{b.datum}</div>
@@ -735,13 +735,13 @@ function NachweiseScreen({ letters, onSelectLetter }) {
                   <button onClick={() => addBeleg(l.id)} style={{
                     flex: 1, padding: "10px 0", background: "#fff", color: "#1A1A1A",
                     border: "1px solid #DDD", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer",
-                  }}>Beleg hinzuf\u00FCgen</button>
+                  }}>Beleg hinzufügen</button>
                 )}
                 {nw.status === "nachgewiesen" && (
                   <div style={{
                     flex: 1, padding: "10px 0", textAlign: "center",
                     fontSize: 12, fontWeight: 600, color: "#2D7D46",
-                  }}>{"\u2713"} Vollst\u00E4ndig nachgewiesen</div>
+                  }}>{"✓"} Vollständig nachgewiesen</div>
                 )}
               </div>
             </div>
@@ -877,7 +877,7 @@ function CameraScreen({ onCapture, onClose }) {
 
 function AnalyzingScreen({ onDone }) {
   const [step, setStep] = useState(0);
-  const steps = ["Text wird erkannt \u2026", "Absender identifiziert \u2026", "Fristen extrahiert \u2026", "Handlungsplan erstellt \u2026"];
+  const steps = ["Text wird erkannt …", "Absender identifiziert …", "Fristen extrahiert …", "Handlungsplan erstellt …"];
   useEffect(() => {
     const timers = steps.map((_, i) => setTimeout(() => setStep(i), i * 700));
     const done = setTimeout(onDone, steps.length * 700 + 400);
@@ -891,7 +891,7 @@ function AnalyzingScreen({ onDone }) {
       <div style={{ textAlign: "center" }}>
         {steps.map((s, i) => (
           <div key={i} style={{ fontSize: 14, color: i <= step ? "#1A1A1A" : "#CCC", fontWeight: i === step ? 600 : 400, marginBottom: 8, transition: "color 0.3s, font-weight 0.3s" }}>
-            {i < step ? "\u2713 " : i === step ? "\u25CF " : "\u25CB "}{s}
+            {i < step ? "✓ " : i === step ? "● " : "○ "}{s}
           </div>
         ))}
       </div>
@@ -909,7 +909,7 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
   const progress = Math.round((todos.filter(t => t.done).length / todos.length) * 100);
 
   const tabs = [
-    { key: "uebersicht", label: "\u00DCbersicht" },
+    { key: "uebersicht", label: "Übersicht" },
     { key: "todo", label: "To-do" },
     { key: "antwort", label: "Antwort" },
     { key: "nachweis", label: "Nachweis" },
@@ -952,7 +952,7 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
             </div>
 
             <div style={{ background: RISK_MAP[letter.risiko].bg, border: `1px solid ${RISK_MAP[letter.risiko].color}33`, borderRadius: 10, padding: 16, marginBottom: 14 }}>
-              <div style={{ fontSize: 11, color: RISK_MAP[letter.risiko].color, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: 6 }}>Was passiert bei Fristvers\u00E4umnis?</div>
+              <div style={{ fontSize: 11, color: RISK_MAP[letter.risiko].color, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: 6 }}>Was passiert bei Fristversäumnis?</div>
               <div style={{ fontSize: 14, color: "#333", lineHeight: 1.6 }}>{letter.konsequenz}</div>
             </div>
 
@@ -970,7 +970,7 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
             <button onClick={onGoToCalendar} style={{
               width: "100%", padding: 14, background: "#1A1A1A", color: "#fff", border: "none", borderRadius: 8,
               fontSize: 14, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            }}>{"\uD83D\uDCC5"} Erinnerungen im Kalender setzen</button>
+            }}>{"��"} Erinnerungen im Kalender setzen</button>
           </div>
         )}
 
@@ -994,7 +994,7 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
                   width: 22, height: 22, borderRadius: 6, border: t.done ? "none" : "2px solid #CCC", background: t.done ? "#1A1A1A" : "#fff",
                   display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1, transition: "all 0.15s",
                 }}>
-                  {t.done && <span style={{ color: "#fff", fontSize: 13, fontWeight: 700 }}>{"\u2713"}</span>}
+                  {t.done && <span style={{ color: "#fff", fontSize: 13, fontWeight: 700 }}>{"✓"}</span>}
                 </div>
                 <div>
                   <span style={{ fontSize: 12, fontWeight: 600, color: "#999" }}>Schritt {t.schritt}</span>
@@ -1021,7 +1021,7 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
               width: "100%", padding: 14, background: showVorlage ? "#F5F5F5" : "#1A1A1A", color: showVorlage ? "#1A1A1A" : "#fff",
               border: showVorlage ? "1px solid #DDD" : "none", borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: "pointer", marginBottom: 14,
             }}>
-              {showVorlage ? "Vorlage ausblenden" : "\uD83D\uDCC4 Antwortvorlage anzeigen"}
+              {showVorlage ? "Vorlage ausblenden" : "�� Antwortvorlage anzeigen"}
             </button>
 
             {showVorlage && (
@@ -1036,7 +1036,7 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
               width: "100%", padding: 14, background: "#fff", color: "#1A1A1A", border: "1px solid #DDD", borderRadius: 8,
               fontSize: 14, fontWeight: 600, cursor: "pointer",
             }}>
-              {"\u2197"} Als PDF exportieren (DIN 5008)
+              {"↗"} Als PDF exportieren (DIN 5008)
             </button>
           </div>
         )}
@@ -1045,7 +1045,7 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
           <div>
             <div style={{ background: "#F8F8F8", border: "1px solid #E5E5E5", borderRadius: 10, padding: 16, marginBottom: 14 }}>
               <p style={{ fontSize: 13, color: "#555", lineHeight: 1.5, margin: 0 }}>
-                Dokumentieren Sie Ihren Versand: Foto vom Einlieferungsbeleg, Sendungsnummer, Fax-Protokoll oder Empfangsbest\u00E4tigung.
+                Dokumentieren Sie Ihren Versand: Foto vom Einlieferungsbeleg, Sendungsnummer, Fax-Protokoll oder Empfangsbestätigung.
               </p>
             </div>
 
@@ -1055,24 +1055,24 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
                   width: "100%", padding: 14, background: "#1A1A1A", color: "#fff", border: "none", borderRadius: 8,
                   fontSize: 14, fontWeight: 600, cursor: "pointer", marginBottom: 10,
                 }}>
-                  {"\u2713"} Ich habe es abgeschickt
+                  {"✓"} Ich habe es abgeschickt
                 </button>
                 <button style={{
                   width: "100%", padding: 14, background: "#fff", color: "#1A1A1A", border: "1px solid #DDD", borderRadius: 8,
                   fontSize: 14, fontWeight: 600, cursor: "pointer",
                 }}>
-                  {"\uD83D\uDCF7"} Beleg fotografieren
+                  {"��"} Beleg fotografieren
                 </button>
               </div>
             ) : (
               <div style={{ background: "#F0FFF4", border: "1px solid #2D7D4633", borderRadius: 10, padding: 16, textAlign: "center" }}>
-                <div style={{ fontSize: 32, marginBottom: 8 }}>{"\u2713"}</div>
+                <div style={{ fontSize: 32, marginBottom: 8 }}>{"✓"}</div>
                 <div style={{ fontSize: 15, fontWeight: 600, color: "#2D7D46" }}>Als versendet markiert</div>
-                <div style={{ fontSize: 13, color: "#666", marginTop: 4 }}>19.02.2026 {"\u2013"} Beleg noch hinzuf\u00FCgen?</div>
+                <div style={{ fontSize: 13, color: "#666", marginTop: 4 }}>19.02.2026 {"–"} Beleg noch hinzufügen?</div>
                 <button style={{
                   marginTop: 12, padding: "10px 20px", background: "#fff", border: "1px solid #DDD", borderRadius: 8,
                   fontSize: 13, fontWeight: 600, cursor: "pointer",
-                }}>{"\uD83D\uDCF7"} Beleg hinzuf\u00FCgen</button>
+                }}>{"��"} Beleg hinzufügen</button>
               </div>
             )}
           </div>

@@ -103,13 +103,20 @@ Retained as a specialized fallback for handwritten annotations, faded ink, or do
 - Strong structured output with `strict=True` validation
 - Good fallback if Anthropic/Google have outages
 
-**Self-hosted option -- Ollama + Qwen2.5** (v2 roadmap):
+**Local development -- Ollama + Qwen2.5**:
+- Used during development to avoid burning API credits
 - Following Invotract's dual-model approach:
   - **Qwen2.5-VL 7B**: Vision model for scanned documents
   - **Qwen2.5 3B**: Text-only model for native PDFs (faster, lighter)
 - Smart routing: text-layer PDFs → text model, scanned → vision model
-- Full privacy: zero data leaves the server
-- Requires GPU (NVIDIA) -- suitable for enterprise on-premise deployments
+- Full privacy: zero data leaves the machine
+- Also serves enterprise on-premise deployments (v2 roadmap)
+
+**Platform LLM -- Cloudflare Workers AI**:
+- On-platform inference for lightweight tasks (classification, embeddings, summaries)
+- No external API latency -- runs on the same Cloudflare edge network as the Workers backend
+- Models available: Llama, Mistral, and others via Workers AI catalog
+- Use case: supplement external APIs for cost-sensitive or latency-sensitive operations
 
 ### Smart Document Routing (from Invotract)
 
@@ -166,46 +173,57 @@ This routing saves ~60% on LLM costs for text-based PDFs (majority of German gov
 
 ## 4. BACKEND AND INFRASTRUCTURE
 
-### Recommendation: Hono.js on Hetzner VPS + Supabase (Frankfurt)
+### Recommendation: Hono.js on Cloudflare Workers + D1 + R2
 
 ```
 Mobile App (Expo)
      |
      v
-Supabase (Frankfurt EU region)
-  - Auth (JWT, social login, email/password)
-  - PostgreSQL database
-  - Edge Functions (for webhooks)
-  - Storage (encrypted document images)
+Cloudflare Workers (EU region)
+  - Hono.js API server
+  - Letter processing pipeline
+  - LLM orchestration (Workers AI + external APIs)
+  - Cron Triggers (deadline reminders)
+  - Push notifications
      |
      v
-Hono.js API Server (Hetzner VPS, Nuremberg)
-  - Letter processing pipeline
-  - LLM orchestration
-  - PDF generation (Typst CLI)
-  - Cron jobs (deadline reminders)
-  - Push notifications
+Cloudflare D1 (SQLite via Drizzle ORM)
+  - User data, extracted letter data, deadlines
+  - Lightweight, edge-native database
+     |
+Cloudflare R2 (EU bucket)
+  - Encrypted document images
+  - Proof-of-delivery photos
+     |
+Custom Auth (jose JWT + OTP)
+  - Email/SMS OTP for registration/login
+  - JWT session tokens signed with jose
 ```
 
-**Why Supabase (Frankfurt)**:
-- EU region with GDPR-compliant data residency
-- Auth, database, storage, real-time out of the box
-- PostgreSQL with Row Level Security
-- Free tier generous for MVP; Pro at $25/month
+**Why Cloudflare Workers + D1**:
+- Zero-ops serverless with EU data locality
+- D1 (SQLite) via Drizzle ORM -- simple schema, edge-fast reads, no connection pooling
+- R2 for encrypted object storage (S3-compatible, zero egress fees)
+- Workers AI for on-platform LLM inference (supplementary to external APIs)
+- Cron Triggers replace traditional cron jobs for deadline reminders
+- Hono.js is native to Workers -- proven in Save2Save sister project
+- Free tier generous for MVP; Workers Paid at $5/month
 
-**Why Hono.js on Hetzner (not Cloudflare Workers)**:
-- Hetzner VPS EUR 3.79/month: 2 vCPU, 4GB RAM, 40GB SSD
-- Direct database connections (no connection pooling headaches)
-- Can run Typst CLI for PDF generation (impossible in serverless)
-- Can run longer processes (LLM calls take 2-5s; Workers have CPU time limits)
-- Hono.js is runtime-agnostic -- easy migration to Workers/fly.io later
-- German company, German data centers, full GDPR compliance
+**Why Custom JWT + OTP (not Supabase Auth)**:
+- Full control over auth flow -- no vendor lock-in
+- jose library for JWT signing/verification (same pattern as Save2Save)
+- OTP via Resend (email) + Twilio (SMS) for passwordless login
+- Social login (Google, Apple) via OAuth2 PKCE flow
+
+**PDF generation note**: Typst CLI cannot run in Workers (no filesystem). Two options:
+- Run Typst in a Cloudflare Workers container (Workers for Platforms)
+- Use a lightweight Hetzner VPS (EUR 3.79/month) solely for PDF generation, called from Workers
 
 | Option | Pros | Cons | Verdict |
 |--------|------|------|---------|
-| **Cloudflare Workers + D1** | Zero ops, global edge | D1 limitations, no long-running tasks, no CLI tools | Wrong for this workload |
-| **fly.io (Frankfurt)** | Docker, EU region, auto-scaling | More expensive at low scale | Good for growth stage |
-| **Railway** | Easy deploys, EU region | Less predictable costs | Decent alternative |
+| **Cloudflare Workers + D1** | Zero ops, global edge, proven in Save2Save | No CLI tools (Typst needs workaround) | Primary choice |
+| **Hetzner VPS (PDF sidecar)** | Runs Typst CLI, cheap | Extra server to manage | PDF generation only |
+| **fly.io (Frankfurt)** | Docker, EU region, auto-scaling | More expensive at low scale | Alternative if Workers limits hit |
 
 ---
 
@@ -268,7 +286,7 @@ Hono.js API Server (Hetzner VPS, Nuremberg)
 1. **On-device first**: OCR runs locally by default. Documents never leave device unless user opts in.
 2. **Data minimization**: Store only extracted text and structured data on server, not original images.
 3. **EU-only processing**: All cloud services in Frankfurt/EU.
-4. **Encryption**: At rest (Supabase storage) and in transit (TLS 1.3).
+4. **Encryption**: At rest (Cloudflare R2 server-side encryption) and in transit (TLS 1.3).
 5. **Data retention**: Auto-delete after configurable period (default: 90 days post-deadline).
 6. **Transparency**: Show users which processing mode is active (on-device vs. cloud).
 
@@ -286,7 +304,7 @@ Hono.js API Server (Hetzner VPS, Nuremberg)
                                     |                   |
                               [Structured data] <-------+
                                     |
-                              [Store in Supabase Frankfurt]
+                              [Store in Cloudflare D1 + R2 (EU)]
                               [Encrypted, with retention policy]
 ```
 
@@ -309,16 +327,18 @@ Hono.js API Server (Hetzner VPS, Nuremberg)
 | **LLM (high volume)** | Gemini 2.5 Flash via Vertex AI EU | Cheapest vision model with structured output | Batch operations: re-classification of old letters, bulk reminder text generation, cost-sensitive paths |
 | **LLM (fallback)** | GPT-4o via OpenAI API | Strong structured output, availability hedge | Same extraction pipeline when Claude/Gemini unavailable; requires PDF-to-PNG preprocessing |
 | **LLM (self-hosted)** | Qwen2.5-VL + Qwen2.5 via Ollama | Enterprise on-premise, full privacy (v2) | Law firms / tax advisors who cannot send client documents to external APIs |
-| **Auth** | Supabase Auth (Frankfurt) | JWT, social login, email/password | User registration, login, session management; social login (Google, Apple) for frictionless onboarding |
-| **Database** | Supabase PostgreSQL (Frankfurt) | RLS, real-time, managed | Stores extracted letter data, deadlines, user preferences; row-level security isolates per-user data; real-time sync across devices |
-| **Storage** | Supabase Storage (Frankfurt) | Encrypted, EU-hosted | Proof-of-delivery photos (posting receipts, tracking screenshots), original scan images (opt-in) |
-| **Backend API** | Hono.js on Hetzner VPS | EU hosting, long-running tasks, CLI access | API server: receives scans, orchestrates LLM calls, runs deadline cron jobs (T-7/T-3/T-1), generates PDFs, sends push |
+| **LLM (local dev)** | Ollama (Qwen2.5-VL + Qwen2.5) | Free local inference, no API keys needed | Local development and testing: run full extraction pipeline offline without burning API credits |
+| **LLM (platform)** | Cloudflare Workers AI | On-platform inference, no external API latency | Supplementary LLM tasks: text classification, embeddings, lightweight extraction where Workers AI models suffice |
+| **Auth** | Custom JWT (jose) + OTP (email/SMS) | Full control, no vendor lock-in | User registration via email/SMS OTP, JWT session tokens, social login (Google, Apple) via OAuth2 PKCE |
+| **Database** | Cloudflare D1 (SQLite) via Drizzle ORM | Edge-native, zero connection pooling, simple schema | Stores extracted letter data, deadlines, user preferences; Drizzle ORM for type-safe queries |
+| **Storage** | Cloudflare R2 (EU bucket) | S3-compatible, zero egress fees, EU data locality | Proof-of-delivery photos (posting receipts, tracking screenshots), original scan images (opt-in) |
+| **Backend API** | Hono.js on Cloudflare Workers | Zero-ops serverless, EU region, native Hono.js support | API server: receives scans, orchestrates LLM calls, Cron Triggers for deadline reminders (T-7/T-3/T-1), sends push |
 | **PDF generation** | Typst (server-side) | Fast, precise DIN 5008 layout | "Antwort" tab: generates print-ready response letters with auto-filled sender, reference number, fold marks, address window |
 | **Calendar** | expo-calendar + ics npm package | Native calendar write + .ics export | "Erinnerungen im Kalender setzen" button: writes deadline + T-7/T-3/T-1 to native calendar; .ics download for web users |
 | **Payments (mobile)** | RevenueCat | Unified iOS/Android/Web subscriptions | Paywall for premium: unlimited scans, PDF export, cloud OCR, auto-sync calendar |
 | **Payments (web)** | Stripe via RevenueCat Web Billing | SEPA, German invoice compliance | SEPA direct debit for German users; generates compliant invoices with Umsatzsteuer |
 | **Push** | Expo Push Notifications | Free, managed | Deadline reminders at T-7/T-3/T-1; urgent "Frist morgen!" alerts; proof follow-ups ("Beleg noch hinzufugen?") |
-| **Hosting** | Hetzner VPS (Nuremberg) | EUR 5.49/month, German company, GDPR | Runs Hono.js API + Typst CLI + cron scheduler; all data stays in Germany |
+| **Hosting** | Cloudflare Workers (EU) + Hetzner VPS (PDF sidecar) | Workers: zero-ops, global edge; Hetzner: Typst CLI for PDF generation | Workers: API + cron + LLM orchestration; Hetzner (EUR 3.79/mo): Typst PDF rendering only |
 | **CI/CD** | GitHub Actions | Free for public repos | Automated linting, tests, Expo EAS builds for iOS/Android, preview deployments for PRs |
 
 ---
@@ -327,15 +347,18 @@ Hono.js API Server (Hetzner VPS, Nuremberg)
 
 | Service | Cost |
 |---------|------|
-| Hetzner VPS (CX22) | EUR 5.49 |
-| Supabase Pro | $25 |
+| Cloudflare Workers Paid plan | $5 |
+| Cloudflare D1 (5M reads, 1M writes) | ~$0.75 |
+| Cloudflare R2 (10GB storage, 1M requests) | ~$0.50 |
+| Hetzner VPS (PDF sidecar, CX11) | EUR 3.79 |
 | Claude Haiku API (~40K text-route scans) | ~$60 |
 | Gemini Flash API (~10K high-volume batch) | ~$4 |
 | Azure Doc Intelligence (~1K specialist) | ~$1.50 |
+| Resend (email OTP, 10K emails) | Free tier |
 | RevenueCat | Free (under $2,500 MTR) |
 | Expo Push | Free |
-| Domain + DNS | ~$1 |
-| **Total** | **~$98/month** |
+| Domain + DNS (Cloudflare) | Free |
+| **Total** | **~$76/month** |
 
 ---
 

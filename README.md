@@ -66,14 +66,17 @@ Receipt photos, send date, recipient address, tracking ID -- all in one place pe
 | **LLM (primary)** | Claude Sonnet 4.6 | Core extraction pipeline: classifies letter type, detects deadlines, generates risk assessment, creates action plan, drafts response template -- all from one API call |
 | **LLM (high volume)** | Gemini 2.5 Flash (Vertex AI EU) | Batch processing and cost-sensitive paths: re-classification of previously scanned letters, bulk reminder text generation |
 | **LLM (fallback)** | GPT-4o | Activated when Claude/Gemini are unavailable: same extraction pipeline, requires PDF-to-PNG preprocessing |
-| **LLM (self-hosted)** | Qwen2.5-VL + Qwen2.5 via Ollama | Enterprise/on-premise deployment (v2): law firms or tax advisors who cannot send client documents to external APIs |
-| **Backend** | Hono.js on Hetzner VPS (Nuremberg) | API server: receives scans, orchestrates LLM calls, runs deadline cron jobs (T-7/T-3/T-1 reminders), generates PDFs, sends push notifications |
-| **Database + Auth** | Supabase (Frankfurt) | User accounts (email/social login), stores extracted letter data + deadlines, row-level security per user, real-time sync across devices |
-| **Storage** | Supabase Storage (Frankfurt) | Encrypted storage for proof-of-delivery photos (posting receipts, tracking screenshots), original scan images (opt-in) |
-| **PDF Generation** | Typst | "Antwort" tab: generates ready-to-print response letters in DIN 5008 format with auto-filled sender, reference number, fold marks |
+| **LLM (self-hosted)** | Qwen2.5-VL + Qwen2.5 via Ollama | Local development (no API credits needed) + enterprise/on-premise deployment (v2) |
+| **LLM (platform)** | Cloudflare Workers AI | On-platform inference for lightweight tasks: classification, embeddings, summaries |
+| **Backend** | Hono.js on Cloudflare Workers (EU) | API server: receives scans, orchestrates LLM calls, Cron Triggers for deadline reminders (T-7/T-3/T-1), sends push notifications |
+| **Database** | Cloudflare D1 (SQLite) via Drizzle ORM | Stores extracted letter data, deadlines, user preferences; edge-native, type-safe queries |
+| **Auth** | Custom JWT (jose) + OTP (email/SMS) | Passwordless login via email/SMS OTP, JWT sessions, social login (Google, Apple) via OAuth2 PKCE |
+| **Storage** | Cloudflare R2 (EU bucket) | Encrypted storage for proof-of-delivery photos (posting receipts, tracking screenshots), original scan images (opt-in) |
 | **Calendar** | expo-calendar + ics package | "Erinnerungen im Kalender setzen" button: writes deadline + T-7/T-3/T-1 reminders to native iOS/Android calendar; .ics export for web users |
+| **PDF Generation** | Typst (Hetzner PDF sidecar) | "Antwort" tab: generates ready-to-print response letters in DIN 5008 format (Typst CLI needs a VPS, not serverless) |
 | **Payments** | RevenueCat + Stripe | Paywall for premium features (unlimited scans, PDF export, cloud OCR); SEPA direct debit for German users, App Store/Play Store IAP for mobile |
 | **Push** | Expo Push Notifications | Deadline reminders at T-7, T-3, T-1 days; "Frist morgen!" urgent alerts; proof-of-delivery follow-ups ("Beleg noch hinzufugen?") |
+| **Hosting** | Cloudflare Workers (EU) + Hetzner VPS (PDF only) | Workers: API + cron + LLM orchestration; Hetzner (EUR 3.79/mo): Typst PDF rendering |
 | **CI/CD** | GitHub Actions | Automated builds, linting, Expo EAS builds for iOS/Android, preview deployments for PRs |
 
 ### AI Architecture (Invotract Pattern)
@@ -101,9 +104,9 @@ The LLM performs OCR and structured extraction in a single API call -- no separa
 ## Privacy
 
 - **On-device first**: OCR runs locally by default. Documents never leave the device unless the user opts in.
-- **EU-only processing**: All cloud services hosted in Frankfurt / Nuremberg.
+- **EU-only processing**: All cloud services on Cloudflare (EU region) and Hetzner (Nuremberg).
 - **Data minimization**: Only extracted text and structured data stored server-side, not original images.
-- **Encryption**: At rest (Supabase Storage) and in transit (TLS 1.3).
+- **Encryption**: At rest (Cloudflare R2 server-side encryption) and in transit (TLS 1.3).
 - **Auto-deletion**: Configurable retention period (default: 90 days post-deadline).
 
 ---
@@ -156,9 +159,9 @@ FristRadar draws from two sister projects within the Teknora ecosystem: [Invotra
 | **Product** | Mobile app for German government mail deadlines | Headless invoice extraction API | Mobile safety app: check-ins, digital vault, digital will |
 | **Target users** | 83M German citizens | Enterprise: ERP integrators, accounting firms | Individuals + families (safety/care) |
 | **Frontend** | Expo SDK 54 + React Native | None (headless API) | Expo SDK 54 + React Native + Vite landing page |
-| **Backend** | Hono.js on Hetzner VPS | FastAPI (Python 3.12) | Hono.js on Cloudflare Workers |
-| **Database** | Supabase PostgreSQL (Frankfurt) | None (stateless) | Cloudflare D1 (SQLite) via Drizzle ORM |
-| **Auth** | Supabase Auth (JWT, social login) | RSA-signed license keys | Custom JWT (jose) + OTP (email/SMS) |
+| **Backend** | Hono.js on Cloudflare Workers | FastAPI (Python 3.12) | Hono.js on Cloudflare Workers |
+| **Database** | Cloudflare D1 (SQLite) via Drizzle ORM | None (stateless) | Cloudflare D1 (SQLite) via Drizzle ORM |
+| **Auth** | Custom JWT (jose) + OTP (email/SMS) | RSA-signed license keys | Custom JWT (jose) + OTP (email/SMS) |
 | **LLM primary** | Claude Sonnet 4.6 (native PDF) | Claude Sonnet 4.6 (native PDF) | None |
 | **LLM secondary** | Gemini 2.5 Flash (Vertex AI EU) | GPT-4o | None |
 | **LLM self-hosted** | Qwen2.5-VL via Ollama (v2) | Qwen2.5-VL via Ollama (production) | None |
@@ -172,12 +175,12 @@ FristRadar draws from two sister projects within the Teknora ecosystem: [Invotra
 | **i18n** | German only (MVP) | N/A | i18next (multi-language) |
 | **Mobile payments** | RevenueCat (App Store + Play Store) | License-based (RSA-signed) | react-native-iap (Apple IAP + Google Play) |
 | **Web payments** | Stripe (SEPA) | Per-domain license | PayPal Subscriptions |
-| **Hosting** | Hetzner VPS (Nuremberg) | Docker Compose / Windows service | Cloudflare Workers (edge) |
+| **Hosting** | Cloudflare Workers (EU) + Hetzner (PDF sidecar) | Docker Compose / Windows service | Cloudflare Workers (edge) |
 | **CI/CD** | GitHub Actions | Not specified | GitHub Actions + EAS Build (fingerprint caching) |
 | **Monorepo** | No (single demo-app) | No | Yes (pnpm workspaces) |
 | **E2E tests** | Not yet | httpx | Playwright |
-| **Encryption** | Supabase at-rest + TLS | N/A | AES-256-GCM per vault entry (zero-knowledge) |
-| **Privacy** | EU-only (Frankfurt/Nuremberg) | Stateless (no retention) | Cloudflare edge (global) |
+| **Encryption** | Cloudflare R2 at-rest + TLS | N/A | AES-256-GCM per vault entry (zero-knowledge) |
+| **Privacy** | EU-only (Cloudflare EU / Hetzner Nuremberg) | Stateless (no retention) | Cloudflare edge (global) |
 
 ### What FristRadar Reuses From Each Project
 
@@ -189,7 +192,9 @@ FristRadar draws from two sister projects within the Teknora ecosystem: [Invotra
 | **Strict JSON schemas** | `additionalProperties: false`, null for missing fields | -- |
 | **Self-hosted Ollama** | Qwen2.5-VL 7B + Qwen2.5 3B dual-model setup | -- |
 | **Expo + React Native patterns** | -- | Same SDK 54, same Expo Router 6 |
-| **Hono.js backend** | -- | Same framework, proven on Cloudflare Workers |
+| **Hono.js on Cloudflare Workers** | -- | Same framework + platform, identical deployment model |
+| **Cloudflare D1 + Drizzle ORM** | -- | Same database + ORM stack, shared schema patterns |
+| **Custom JWT (jose) + OTP** | -- | Same auth architecture, passwordless login flow |
 | **TanStack Query** | -- | Server state pattern for data fetching/caching |
 | **Push notification escalation** | -- | Expo Push with escalation logic (adaptable for T-7/T-3/T-1 alerts) |
 | **Monorepo structure** | -- | pnpm workspaces with shared types |

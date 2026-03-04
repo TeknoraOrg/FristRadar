@@ -73,10 +73,10 @@ Receipt photos, send date, recipient address, tracking ID -- all in one place pe
 | **Auth** | Custom JWT (jose) + OTP (email/SMS) | Passwordless login via email/SMS OTP, JWT sessions, social login (Google, Apple) via OAuth2 PKCE |
 | **Storage** | Cloudflare R2 (EU bucket) | Encrypted storage for proof-of-delivery photos (posting receipts, tracking screenshots), original scan images (opt-in) |
 | **Calendar** | expo-calendar + ics package | "Erinnerungen im Kalender setzen" button: writes deadline + T-7/T-3/T-1 reminders to native iOS/Android calendar; .ics export for web users |
-| **PDF Generation** | Typst (Hetzner PDF sidecar) | "Antwort" tab: generates ready-to-print response letters in DIN 5008 format (Typst CLI needs a VPS, not serverless) |
+| **PDF Generation** | Typst (server-side) | "Antwort" tab: generates ready-to-print response letters in DIN 5008 format with auto-filled sender, reference number, fold marks |
 | **Payments** | RevenueCat + Stripe | Paywall for premium features (unlimited scans, PDF export, cloud OCR); SEPA direct debit for German users, App Store/Play Store IAP for mobile |
 | **Push** | Expo Push Notifications | Deadline reminders at T-7, T-3, T-1 days; "Frist morgen!" urgent alerts; proof-of-delivery follow-ups ("Beleg noch hinzufugen?") |
-| **Hosting** | Cloudflare Workers (EU) + Hetzner VPS (PDF only) | Workers: API + cron + LLM orchestration; Hetzner (EUR 3.79/mo): Typst PDF rendering |
+| **Hosting** | Cloudflare Workers (EU) | Zero-ops serverless: API server, Cron Triggers for deadline reminders, LLM orchestration |
 | **CI/CD** | GitHub Actions | Automated builds, linting, Expo EAS builds for iOS/Android, preview deployments for PRs |
 
 ### AI Architecture (Invotract Pattern)
@@ -104,7 +104,7 @@ The LLM performs OCR and structured extraction in a single API call -- no separa
 ## Privacy
 
 - **On-device first**: OCR runs locally by default. Documents never leave the device unless the user opts in.
-- **EU-only processing**: All cloud services on Cloudflare (EU region) and Hetzner (Nuremberg).
+- **EU-only processing**: All cloud services on Cloudflare (EU region).
 - **Data minimization**: Only extracted text and structured data stored server-side, not original images.
 - **Encryption**: At rest (Cloudflare R2 server-side encryption) and in transit (TLS 1.3).
 - **Auto-deletion**: Configurable retention period (default: 90 days post-deadline).
@@ -175,12 +175,12 @@ FristRadar draws from two sister projects within the Teknora ecosystem: [Invotra
 | **i18n** | German only (MVP) | N/A | i18next (multi-language) |
 | **Mobile payments** | RevenueCat (App Store + Play Store) | License-based (RSA-signed) | react-native-iap (Apple IAP + Google Play) |
 | **Web payments** | Stripe (SEPA) | Per-domain license | PayPal Subscriptions |
-| **Hosting** | Cloudflare Workers (EU) + Hetzner (PDF sidecar) | Docker Compose / Windows service | Cloudflare Workers (edge) |
+| **Hosting** | Cloudflare Workers (EU) | Docker Compose / Windows service | Cloudflare Workers (edge) |
 | **CI/CD** | GitHub Actions | Not specified | GitHub Actions + EAS Build (fingerprint caching) |
 | **Monorepo** | No (single demo-app) | No | Yes (pnpm workspaces) |
 | **E2E tests** | Not yet | httpx | Playwright |
 | **Encryption** | Cloudflare R2 at-rest + TLS | N/A | AES-256-GCM per vault entry (zero-knowledge) |
-| **Privacy** | EU-only (Cloudflare EU / Hetzner Nuremberg) | Stateless (no retention) | Cloudflare edge (global) |
+| **Privacy** | EU-only (Cloudflare EU) | Stateless (no retention) | Cloudflare edge (global) |
 
 ### What FristRadar Reuses From Each Project
 

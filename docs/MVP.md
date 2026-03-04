@@ -2,111 +2,111 @@
 
 ## Vision
 
-**FristRadar** ist eine Deutschland-spezifische, fristen-orientierte Workflow-App für Behördenbriefe.
+**FristRadar** is a Germany-specific, deadline-oriented workflow app for government letters.
 
-Ein Foto vom Behördenbrief liefert sofort:
+A single photo of a government letter instantly delivers:
 
-1. **Frist(en)** + "was passiert, wenn ich's verpasse" (Risiko-Stufe)
-2. **To-do-Plan** (z.B. "Widerspruch einlegen", "Unterlagen nachreichen", "Termin buchen")
-3. **Antwort-Pack**: fertiger Text (Deutsch, optional in einfacher Sprache) + PDF-Export im DIN-Layout + Checkliste der Beilagen
-4. **Nachweis-Modus**: erinnert an "versende nachweisbar" + speichert Belege (Einlieferungsbeleg, Screenshot, Empfangsbestätigung etc.)
-5. **Kalender + Erinnerungen** (T-7, T-3, T-1) mit "Ich hab's abgeschickt" Button
-
----
-
-## Warum Deutschland? (High Impact)
-
-- **Fristenkultur**: Viele Prozesse drehen sich um formale Deadlines
-- **Kein System-Tracker**: Bürger*innen haben oft keinen Tracker für Briefpost
-- **Digitale Briefkästen** (z.B. Deutsche Post POSTSCAN) lösen Digitalisierung, nicht Fristen → Handlung → Antwort
+1. **Deadline(s)** + "what happens if I miss it" (risk level)
+2. **Action plan** (e.g. "file an objection", "submit documents", "book an appointment")
+3. **Response pack**: ready-to-send text (German, optionally in plain language) + PDF export in DIN layout + attachment checklist
+4. **Proof mode**: reminds to "send with proof of delivery" + stores evidence (posting receipts, screenshots, delivery confirmations, etc.)
+5. **Calendar + reminders** (T-7, T-3, T-1) with an "I've sent it" button
 
 ---
 
-## 3 harte Differenzierer
+## Why Germany? (High Impact)
 
-### 1) Behörden-Domänenwissen als Regelwerk
-
-Erkenne typische Muster:
-- "innerhalb von X Tagen nach Bekanntgabe/Zustellung"
-- "bis spätestens Datum"
-- "Frist beginnt mit …"
-
-Mapping auf Kategorie + Standard-Workflows:
-- Jobcenter, Ausländerbehörde, Finanzamt, Kita/Schule, Bußgeldstelle
-
-### 2) Antwort-Pack statt Zusammenfassung
-
-Die Konkurrenz fasst zusammen. FristRadar liefert **handlungsfertige Artefakte**:
-- Briefvorlage (DIN 5008)
-- Betreff + Aktenzeichen automatisch
-- Anlagenliste
-- Optional: "Fax/Einwurf-Einschreiben/De-Mail/E-Mail" Auswahl
-
-### 3) Beweisführung / "Nachweis"-Ordner
-
-- Beleg-Fotos, Versanddatum, Empfängeradresse, Tracking-ID — alles an einem Ort
-- Idiotensicher: kein Nachweis vergessen
+- **Deadline culture**: Many processes revolve around formal deadlines
+- **No system tracker**: Citizens often have no tracker for postal mail
+- **Digital mailboxes** (e.g. Deutsche Post POSTSCAN) solve digitization, not deadlines → action → response
 
 ---
 
-## MVP Scope (1–2 Wochen)
+## 3 Hard Differentiators
+
+### 1) Government Domain Knowledge as a Rule Engine
+
+Recognize typical patterns:
+- "within X days of notification/delivery"
+- "no later than [date]"
+- "deadline begins with ..."
+
+Map to category + standard workflows:
+- Jobcenter, Immigration Office, Tax Office, Childcare/School, Traffic Fine Authority
+
+### 2) Response Pack, Not Just a Summary
+
+Competitors summarize. FristRadar delivers **action-ready artifacts**:
+- Letter template (DIN 5008 format)
+- Subject line + reference number auto-filled
+- List of attachments
+- Optional: delivery method selection (fax / registered mail / De-Mail / email)
+
+### 3) Evidence / "Proof" Folder
+
+- Receipt photos, send date, recipient address, tracking ID — all in one place
+- Foolproof: no proof left behind
+
+---
+
+## MVP Scope (1–2 Weeks)
 
 ### Input
-- Foto oder PDF vom Brief
+- Photo or PDF of a letter
 
 ### Output (Minimum)
-- Erkannte Frist (Datum) + Confidence Score
-- 1 Satz "Was wird verlangt?"
-- 3-Schritte To-do
-- Export: Kalender (.ics) + eine generische Antwortvorlage
+- Detected deadline (date) + confidence score
+- 1-sentence "What is being requested?"
+- 3-step to-do plan
+- Export: calendar (.ics) + one generic response template
 
-### Technik (quick & clean)
-- On-device OCR (oder serverseitig)
-- LLM nur für Klassifikation + Extraktion (strict JSON schema)
-- "Rule layer" für Fristlogik + Muster (deutsche Phrasen)
-
----
-
-## Datenschutz / Compliance (wichtig in DE)
-
-- **Standard**: Lokale Verarbeitung oder EU-Hosting
-- **Automatische Redaktion** sensibler Daten (Name, Adresse) für Cloud-Analyse
-- **Klare Löschfunktionen**
-- Abhebung von "AI scan everything to cloud"-Apps
+### Technical Approach (quick & clean)
+- On-device OCR (or server-side)
+- LLM only for classification + extraction (strict JSON schema)
+- "Rule layer" for deadline logic + patterns (German phrases)
 
 ---
 
-## Monetarisierung
+## Privacy / Compliance (critical in Germany)
 
-| Tier | Preis | Features |
+- **Default**: Local processing or EU hosting
+- **Automatic redaction** of sensitive data (name, address) for cloud analysis
+- **Clear deletion functions**
+- Differentiation from "AI scan everything to cloud" apps
+
+---
+
+## Monetization
+
+| Tier | Price | Features |
 |------|-------|----------|
-| Free | 0 € | 5 Briefe/Monat |
-| Premium | 4–9 €/Monat | Unbegrenzt + Vorlagen + Familienmodus |
-| B2B light | TBD | Vereine/Schulen/kleine Kanzleien: "Fristen-Inbox" |
+| Free | 0 EUR | 5 letters/month |
+| Premium | 4–9 EUR/month | Unlimited + templates + family mode |
+| B2B light | TBD | Associations/schools/small law firms: "Deadline inbox" |
 
 ---
 
-## Behördenbrief-Kategorien (Top 10)
+## Government Letter Categories (Top 10)
 
-1. **Finanzamt** — Steuererklärung, Bescheide, Nachforderungen
-2. **Bußgeldstelle** — OWi-Verfahren, Anhörungen
-3. **Jobcenter / Arbeitsagentur** — Bewilligungen, Mitwirkungspflichten
-4. **Ausländerbehörde** — Aufenthaltstitel, Verlängerungen
-5. **Krankenkasse** — Beiträge, Leistungen
-6. **Rentenversicherung** — Kontenklärung, Bescheide
-7. **Bauamt** — Baugenehmigungen, Auflagen
-8. **Kfz-Zulassung** — TÜV, An-/Abmeldung
-9. **Kita/Schule** — Anmeldung, Beiträge
-10. **Gericht** — Mahnbescheide, Ladungen
+1. **Tax Office (Finanzamt)** — Tax returns, assessments, back payments
+2. **Traffic Fine Authority (Bußgeldstelle)** — Regulatory offenses, hearings
+3. **Jobcenter / Employment Agency** — Approvals, cooperation obligations
+4. **Immigration Office (Ausländerbehörde)** — Residence permits, renewals
+5. **Health Insurance (Krankenkasse)** — Contributions, benefits
+6. **Pension Insurance (Rentenversicherung)** — Account clarification, assessments
+7. **Building Authority (Bauamt)** — Building permits, conditions
+8. **Vehicle Registration (Kfz-Zulassung)** — Inspections, registration/deregistration
+9. **Childcare/School (Kita/Schule)** — Enrollment, fees
+10. **Court (Gericht)** — Payment orders, summons
 
 ---
 
-## Marktanalyse
+## Market Analysis
 
-| Wettbewerber | Was sie tun | Was fehlt |
-|--------------|-------------|-----------|
-| LetterMagic | AI-Briefscanner mit Deadline-Highlighting | Kein DE-Workflow, keine Antwortvorlagen |
-| POSTSCAN (Deutsche Post) | Digitaler Briefkasten | Nur Scan, keine Frist-Erkennung oder Handlungsempfehlung |
-| Allgemeine OCR-Apps | Texterkennung | Kein Behörden-Domänenwissen |
+| Competitor | What They Do | What's Missing |
+|------------|--------------|----------------|
+| LetterMagic | AI letter scanner with deadline highlighting | No German workflow, no response templates |
+| POSTSCAN (Deutsche Post) | Digital mailbox | Scan only — no deadline detection or action recommendations |
+| General OCR apps | Text recognition | No government domain knowledge |
 
-**FristRadar's Chance**: Die konsequente Kette Frist → To-do → Antwort-Pack → Nachweis als fokussiertes Produkt.
+**FristRadar's opportunity**: The consistent chain of Deadline → To-do → Response Pack → Proof as a focused product.

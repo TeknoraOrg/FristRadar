@@ -1,25 +1,82 @@
 import { useState, useEffect } from "react";
 
+const APP_PASSWORD = "frist2026";
+const AUTH_KEY = "fristradar_auth";
+
+function LockScreen({ onUnlock }) {
+  const [pin, setPin] = useState("");
+  const [error, setError] = useState(false);
+  const [shake, setShake] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (pin === APP_PASSWORD) {
+      localStorage.setItem(AUTH_KEY, "1");
+      onUnlock();
+    } else {
+      setError(true);
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      setTimeout(() => setError(false), 2000);
+    }
+  };
+
+  return (
+    <div style={{
+      height: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+      background: "#FAFAFA", fontFamily: "-apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    }}>
+      <style>{`@keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-8px)} 40%,80%{transform:translateX(8px)} }`}</style>
+      <div style={{ width: 36, height: 36, borderRadius: 8, background: "#1A1A1A", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+        <span style={{ color: "#fff", fontWeight: 800, fontSize: 18 }}>F</span>
+      </div>
+      <h1 style={{ fontSize: 22, fontWeight: 700, color: "#1A1A1A", margin: "0 0 4px", letterSpacing: "-0.5px" }}>FristRadar</h1>
+      <p style={{ fontSize: 13, color: "#888", margin: "0 0 32px" }}>Enter password to continue</p>
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, width: 260, animation: shake ? "shake 0.4s ease" : "none" }}>
+        <input
+          type="password"
+          value={pin}
+          onChange={(e) => setPin(e.target.value)}
+          placeholder="Password"
+          autoFocus
+          style={{
+            width: "100%", padding: "14px 16px", fontSize: 15, border: `1.5px solid ${error ? "#C41E3A" : "#DDD"}`,
+            borderRadius: 10, outline: "none", background: "#fff", boxSizing: "border-box",
+            transition: "border-color 0.2s",
+          }}
+        />
+        <button type="submit" style={{
+          width: "100%", padding: 14, background: "#1A1A1A", color: "#fff", border: "none", borderRadius: 10,
+          fontSize: 15, fontWeight: 600, cursor: "pointer",
+        }}>Unlock</button>
+        {error && <span style={{ fontSize: 13, color: "#C41E3A", fontWeight: 500 }}>Wrong password</span>}
+      </form>
+    </div>
+  );
+}
+
 const DEMO_LETTERS = [
   {
     id: 1,
     absender: "Finanzamt Berlin-Mitte",
     aktenzeichen: "St.-Nr. 21/815/04711",
-    betreff: "Aufforderung zur Abgabe der Einkommensteuererklärung 2024",
+    betreff: "Aufforderung zur Abgabe der Einkommensteuererkl\u00E4rung 2024",
     datum: "05.02.2026",
     frist: "19.03.2026",
-    tage_verbleibend: 28,
+    frist_iso: "2026-03-19",
+    tage_verbleibend: 15,
     risiko: "hoch",
-    zusammenfassung: "Das Finanzamt fordert Sie auf, Ihre Einkommensteuererklärung für das Jahr 2024 einzureichen. Bei Nichtabgabe droht ein Verspätungszuschlag.",
-    konsequenz: "Verspätungszuschlag ab 0,25 % der festgesetzten Steuer pro Monat, mindestens 25 \u20AC pro Monat. Zusätzlich kann ein Zwangsgeld festgesetzt werden.",
+    erinnerungen: ["2026-03-12", "2026-03-16", "2026-03-18"],
+    zusammenfassung: "Das Finanzamt fordert Sie auf, Ihre Einkommensteuererkl\u00E4rung f\u00FCr das Jahr 2024 einzureichen. Bei Nichtabgabe droht ein Versp\u00E4tungszuschlag.",
+    konsequenz: "Versp\u00E4tungszuschlag ab 0,25 % der festgesetzten Steuer pro Monat, mindestens 25 \u20AC pro Monat. Zus\u00E4tzlich kann ein Zwangsgeld festgesetzt werden.",
     todos: [
       { schritt: 1, text: "Steuerunterlagen zusammenstellen (Lohnsteuerbescheinigung, Spendenquittungen, Belege)", done: false },
-      { schritt: 2, text: "Steuererklärung über ELSTER oder Steuer-Software erstellen", done: false },
-      { schritt: 3, text: "Erklärung elektronisch übermitteln oder per Post senden", done: false },
-      { schritt: 4, text: "Eingangsbestätigung / Sendeprotokoll sichern", done: false },
+      { schritt: 2, text: "Steuererkl\u00E4rung \u00FCber ELSTER oder Steuer-Software erstellen", done: false },
+      { schritt: 3, text: "Erkl\u00E4rung elektronisch \u00FCbermitteln oder per Post senden", done: false },
+      { schritt: 4, text: "Eingangsbest\u00E4tigung / Sendeprotokoll sichern", done: false },
     ],
     antwort_vorlage: `Max Mustermann
-Musterstraße 12
+Musterstra\u00DFe 12
 10115 Berlin
 
 Finanzamt Berlin-Mitte
@@ -30,68 +87,265 @@ Datum: __.__._____
 
 Steuernummer: 21/815/04711
 
-Betreff: Einkommensteuererklärung 2024
+Betreff: Einkommensteuererkl\u00E4rung 2024
 
 Sehr geehrte Damen und Herren,
 
-in der Anlage übersende ich Ihnen meine Einkommensteuererklärung für das Veranlagungsjahr 2024.
+in der Anlage \u00FCbersende ich Ihnen meine Einkommensteuererkl\u00E4rung f\u00FCr das Veranlagungsjahr 2024.
 
-Ich bitte um Eingangsbestätigung.
+Ich bitte um Eingangsbest\u00E4tigung.
 
-Mit freundlichen Grüßen
+Mit freundlichen Gr\u00FC\u00DFen
 
 
 Max Mustermann
 
 Anlagen:
-- Einkommensteuererklärung 2024
+- Einkommensteuererkl\u00E4rung 2024
 - Lohnsteuerbescheinigung
 - [weitere Belege]`,
-    versand_optionen: ["ELSTER (elektronisch)", "Einschreiben mit Rückschein", "Persönliche Abgabe mit Empfangsbestätigung"],
+    versand_optionen: ["ELSTER (elektronisch)", "Einschreiben mit R\u00FCckschein", "Pers\u00F6nliche Abgabe mit Empfangsbest\u00E4tigung"],
   },
   {
     id: 2,
-    absender: "Bußgeldstelle Köln",
+    absender: "Bu\u00DFgeldstelle K\u00F6ln",
     aktenzeichen: "OWi 2026-KL-00482",
-    betreff: "Anhörung im Ordnungswidrigkeitenverfahren \u2013 Geschwindigkeitsüberschreitung",
+    betreff: "Anh\u00F6rung im Ordnungswidrigkeitenverfahren \u2013 Geschwindigkeits\u00FCberschreitung",
     datum: "12.02.2026",
-    frist: "26.02.2026",
-    tage_verbleibend: 7,
+    frist: "26.03.2026",
+    frist_iso: "2026-03-26",
+    tage_verbleibend: 22,
     risiko: "mittel",
-    zusammenfassung: "Ihnen wird eine Geschwindigkeitsüberschreitung von 23 km/h innerorts vorgeworfen. Sie haben die Möglichkeit, sich innerhalb der Frist zu äußern.",
-    konsequenz: "Ohne Stellungnahme ergeht der Bußgeldbescheid in der Regel ohne Berücksichtigung Ihrer Sicht. Bußgeld: voraussichtlich 115 \u20AC + 1 Punkt in Flensburg.",
+    erinnerungen: ["2026-03-19", "2026-03-23", "2026-03-25"],
+    zusammenfassung: "Ihnen wird eine Geschwindigkeits\u00FCberschreitung von 23 km/h innerorts vorgeworfen. Sie haben die M\u00F6glichkeit, sich innerhalb der Frist zu \u00E4u\u00DFern.",
+    konsequenz: "Ohne Stellungnahme ergeht der Bu\u00DFgeldbescheid in der Regel ohne Ber\u00FCcksichtigung Ihrer Sicht. Bu\u00DFgeld: voraussichtlich 115 \u20AC + 1 Punkt in Flensburg.",
     todos: [
-      { schritt: 1, text: "Anhörungsbogen sorgfältig lesen, Tatvorwurf prüfen", done: false },
+      { schritt: 1, text: "Anh\u00F6rungsbogen sorgf\u00E4ltig lesen, Tatvorwurf pr\u00FCfen", done: false },
       { schritt: 2, text: "Entscheiden: Einspruch oder Zahlung", done: false },
       { schritt: 3, text: "Bei Einspruch: schriftliche Stellungnahme verfassen", done: false },
       { schritt: 4, text: "Fristgerecht absenden und Versandnachweis sichern", done: false },
     ],
     antwort_vorlage: `Max Mustermann
-Musterstraße 12
-50667 Köln
+Musterstra\u00DFe 12
+50667 K\u00F6ln
 
-Bußgeldstelle der Stadt Köln
-50679 Köln
+Bu\u00DFgeldstelle der Stadt K\u00F6ln
+50679 K\u00F6ln
 
 Datum: __.__._____
 
 Aktenzeichen: OWi 2026-KL-00482
 
-Betreff: Stellungnahme zum Anhörungsbogen
+Betreff: Stellungnahme zum Anh\u00F6rungsbogen
 
 Sehr geehrte Damen und Herren,
 
 hiermit nehme ich zu dem oben genannten Verfahren wie folgt Stellung:
 
-[Ihre Stellungnahme hier einfügen]
+[Ihre Stellungnahme hier einf\u00FCgen]
 
-Ich bitte um Berücksichtigung meiner Angaben.
+Ich bitte um Ber\u00FCcksichtigung meiner Angaben.
 
-Mit freundlichen Grüßen
+Mit freundlichen Gr\u00FC\u00DFen
 
 
 Max Mustermann`,
-    versand_optionen: ["Einschreiben (Einwurf)", "Fax mit Sendebericht", "Persönliche Abgabe mit Empfangsbestätigung"],
+    versand_optionen: ["Einschreiben (Einwurf)", "Fax mit Sendebericht", "Pers\u00F6nliche Abgabe mit Empfangsbest\u00E4tigung"],
+  },
+  {
+    id: 3,
+    absender: "Jobcenter M\u00FCnchen",
+    aktenzeichen: "JC-M-2026-09831",
+    betreff: "Aufforderung zur Mitwirkung \u2013 Weiterbewilligungsantrag",
+    datum: "20.02.2026",
+    frist: "10.04.2026",
+    frist_iso: "2026-04-10",
+    tage_verbleibend: 37,
+    risiko: "niedrig",
+    erinnerungen: ["2026-04-03", "2026-04-07", "2026-04-09"],
+    zusammenfassung: "Das Jobcenter fordert Sie auf, den Weiterbewilligungsantrag f\u00FCr B\u00FCrgergeld einzureichen, inkl. aktueller Einkommensnachweise.",
+    konsequenz: "Bei Fristvers\u00E4umnis droht eine Leistungsk\u00FCrzung oder vorl\u00E4ufige Einstellung der Zahlungen.",
+    todos: [
+      { schritt: 1, text: "Weiterbewilligungsantrag ausf\u00FCllen", done: false },
+      { schritt: 2, text: "Einkommensnachweise der letzten 3 Monate beif\u00FCgen", done: false },
+      { schritt: 3, text: "Mietbescheinigung aktualisieren", done: false },
+      { schritt: 4, text: "Antrag pers\u00F6nlich oder per Post einreichen", done: false },
+    ],
+    antwort_vorlage: `Max Mustermann\nMusterstra\u00DFe 12\n80331 M\u00FCnchen\n\nJobcenter M\u00FCnchen\n80333 M\u00FCnchen\n\nDatum: __.__._____\n\nAktenzeichen: JC-M-2026-09831\n\nBetreff: Weiterbewilligungsantrag\n\nSehr geehrte Damen und Herren,\n\nanbei \u00FCbersende ich Ihnen den ausgef\u00FCllten Weiterbewilligungsantrag nebst Anlagen.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann`,
+    versand_optionen: ["Pers\u00F6nliche Abgabe mit Empfangsbest\u00E4tigung", "Einschreiben mit R\u00FCckschein"],
+  },
+];
+
+// Letters revealed one-by-one each time the user scans
+const BACKLOG_LETTERS = [
+  {
+    id: 101,
+    absender: "Amtsgericht Hamburg",
+    aktenzeichen: "AG HH 341 C 1029/26",
+    betreff: "Mahnbescheid \u2013 Forderung aus Kaufvertrag",
+    datum: "01.03.2026",
+    frist: "15.03.2026",
+    frist_iso: "2026-03-15",
+    tage_verbleibend: 11,
+    risiko: "hoch",
+    erinnerungen: ["2026-03-08", "2026-03-12", "2026-03-14"],
+    zusammenfassung: "Ihnen wurde ein Mahnbescheid \u00FCber 1.240 \u20AC zugestellt. Sie k\u00F6nnen innerhalb von zwei Wochen Widerspruch einlegen.",
+    konsequenz: "Ohne Widerspruch wird der Mahnbescheid rechtskr\u00E4ftig. Der Gl\u00E4ubiger kann dann einen Vollstreckungsbescheid beantragen.",
+    todos: [
+      { schritt: 1, text: "Mahnbescheid pr\u00FCfen: Forderung berechtigt?", done: false },
+      { schritt: 2, text: "Bei Einwand: Widerspruch beim Amtsgericht einlegen", done: false },
+      { schritt: 3, text: "Widerspruch fristgerecht absenden", done: false },
+    ],
+    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n20095 Hamburg\n\nAmtsgericht Hamburg\n20355 Hamburg\n\nDatum: __.__._____\n\nAktenzeichen: 341 C 1029/26\n\nBetreff: Widerspruch gegen Mahnbescheid\n\nSehr geehrte Damen und Herren,\n\nhiermit lege ich gegen den Mahnbescheid vom 01.03.2026 fristgerecht Widerspruch ein.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
+    versand_optionen: ["Einschreiben mit R\u00FCckschein", "Fax mit Sendebericht"],
+  },
+  {
+    id: 102,
+    absender: "Rundfunkbeitrag (ARD ZDF)",
+    aktenzeichen: "RB-2026-4839201",
+    betreff: "Festsetzungsbescheid \u2013 R\u00FCckst\u00E4ndige Rundfunkbeitr\u00E4ge",
+    datum: "25.02.2026",
+    frist: "25.03.2026",
+    frist_iso: "2026-03-25",
+    tage_verbleibend: 21,
+    risiko: "mittel",
+    erinnerungen: ["2026-03-18", "2026-03-22", "2026-03-24"],
+    zusammenfassung: "Der Beitragsservice fordert r\u00FCckst\u00E4ndige Rundfunkbeitr\u00E4ge in H\u00F6he von 220,50 \u20AC zzgl. S\u00E4umniszuschlag.",
+    konsequenz: "Bei Nichtzahlung wird der Bescheid vollstreckbar. Pfandung oder Gerichtsvollzieher m\u00F6glich.",
+    todos: [
+      { schritt: 1, text: "Bescheid pr\u00FCfen: Zeitraum und Betrag korrekt?", done: false },
+      { schritt: 2, text: "Bei Fehler: Widerspruch innerhalb 4 Wochen einlegen", done: false },
+      { schritt: 3, text: "Zahlung leisten oder Ratenzahlung beantragen", done: false },
+    ],
+    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n10115 Berlin\n\nARD ZDF Deutschlandradio Beitragsservice\n50656 K\u00F6ln\n\nDatum: __.__._____\n\nBeitragsnummer: RB-2026-4839201\n\nBetreff: Widerspruch gegen Festsetzungsbescheid\n\nSehr geehrte Damen und Herren,\n\n[Ihr Widerspruch hier]\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
+    versand_optionen: ["Einschreiben (Einwurf)", "Online \u00FCber Beitragsservice-Portal"],
+  },
+  {
+    id: 103,
+    absender: "Zulassungsstelle Stuttgart",
+    aktenzeichen: "ZS-S-2026-07744",
+    betreff: "Aufforderung zur Vorlage der HU-Bescheinigung",
+    datum: "28.02.2026",
+    frist: "31.03.2026",
+    frist_iso: "2026-03-31",
+    tage_verbleibend: 27,
+    risiko: "mittel",
+    erinnerungen: ["2026-03-24", "2026-03-28", "2026-03-30"],
+    zusammenfassung: "Ihre Hauptuntersuchung (T\u00DCV) ist seit 2 Monaten \u00FCberf\u00E4llig. Legen Sie die HU-Bescheinigung vor, andernfalls droht Stilllegung.",
+    konsequenz: "Zwangsstilllegung des Fahrzeugs, Bu\u00DFgeld bis 60 \u20AC, Eintrag in Flensburg.",
+    todos: [
+      { schritt: 1, text: "T\u00DCV-Termin vereinbaren", done: false },
+      { schritt: 2, text: "Fahrzeug zur HU bringen", done: false },
+      { schritt: 3, text: "HU-Bescheinigung bei der Zulassungsstelle vorlegen", done: false },
+    ],
+    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n70173 Stuttgart\n\nZulassungsstelle Stuttgart\n70174 Stuttgart\n\nDatum: __.__._____\n\nAktenzeichen: ZS-S-2026-07744\n\nBetreff: Vorlage HU-Bescheinigung\n\nSehr geehrte Damen und Herren,\n\nin der Anlage \u00FCbersende ich die HU-Bescheinigung meines Fahrzeugs.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
+    versand_optionen: ["Pers\u00F6nliche Abgabe", "Einschreiben (Einwurf)"],
+  },
+  {
+    id: 104,
+    absender: "Auslanderb\u00FCro Frankfurt",
+    aktenzeichen: "ABH-FFM-2026-22190",
+    betreff: "Verl\u00E4ngerung der Aufenthaltserlaubnis \u2013 Mitwirkungspflicht",
+    datum: "03.03.2026",
+    frist: "17.04.2026",
+    frist_iso: "2026-04-17",
+    tage_verbleibend: 44,
+    risiko: "hoch",
+    erinnerungen: ["2026-04-10", "2026-04-14", "2026-04-16"],
+    zusammenfassung: "Sie werden aufgefordert, Unterlagen zur Verl\u00E4ngerung Ihrer Aufenthaltserlaubnis einzureichen (Arbeitsvertrag, Mietvertrag, Krankenversicherungsnachweis).",
+    konsequenz: "Ohne rechtzeitige Verl\u00E4ngerung kann eine Duldung oder Ausreisepflicht eintreten.",
+    todos: [
+      { schritt: 1, text: "Arbeitsvertrag und Gehaltsabrechnungen zusammenstellen", done: false },
+      { schritt: 2, text: "Mietvertrag und Anmeldebestatigung kopieren", done: false },
+      { schritt: 3, text: "Krankenversicherungsnachweis besorgen", done: false },
+      { schritt: 4, text: "Pers\u00F6nlich beim Ausl\u00E4nderamt vorsprechen", done: false },
+    ],
+    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n60311 Frankfurt\n\nAusl\u00E4nderbeh\u00F6rde Frankfurt\n60313 Frankfurt\n\nDatum: __.__._____\n\nAktenzeichen: ABH-FFM-2026-22190\n\nBetreff: Verl\u00E4ngerung Aufenthaltserlaubnis\n\nSehr geehrte Damen und Herren,\n\nanbei die angeforderten Unterlagen.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
+    versand_optionen: ["Pers\u00F6nliche Abgabe mit Empfangsbest\u00E4tigung"],
+  },
+  {
+    id: 105,
+    absender: "Finanzamt D\u00FCsseldorf-S\u00FCd",
+    aktenzeichen: "St.-Nr. 133/5214/0815",
+    betreff: "Umsatzsteuer-Voranmeldung Q4/2025 \u2013 Erinnerung",
+    datum: "02.03.2026",
+    frist: "10.04.2026",
+    frist_iso: "2026-04-10",
+    tage_verbleibend: 37,
+    risiko: "hoch",
+    erinnerungen: ["2026-04-03", "2026-04-07", "2026-04-09"],
+    zusammenfassung: "Die Umsatzsteuer-Voranmeldung f\u00FCr Q4/2025 wurde noch nicht eingereicht. Bei weiterem Vers\u00E4umnis wird ein Versp\u00E4tungszuschlag festgesetzt.",
+    konsequenz: "Versp\u00E4tungszuschlag bis zu 10 % der angemeldeten Steuer. Zwangsgeld bis 25.000 \u20AC m\u00F6glich.",
+    todos: [
+      { schritt: 1, text: "Buchhaltung f\u00FCr Q4/2025 abschlie\u00DFen", done: false },
+      { schritt: 2, text: "Umsatzsteuer-Voranmeldung \u00FCber ELSTER erstellen", done: false },
+      { schritt: 3, text: "Voranmeldung elektronisch \u00FCbermitteln", done: false },
+    ],
+    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n40215 D\u00FCsseldorf\n\nFinanzamt D\u00FCsseldorf-S\u00FCd\n40210 D\u00FCsseldorf\n\nDatum: __.__._____\n\nSteuernummer: 133/5214/0815\n\nBetreff: Umsatzsteuer-Voranmeldung Q4/2025\n\nSehr geehrte Damen und Herren,\n\nin der Anlage die Umsatzsteuer-Voranmeldung f\u00FCr Q4/2025.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
+    versand_optionen: ["ELSTER (elektronisch)"],
+  },
+  {
+    id: 106,
+    absender: "Ordnungsamt Berlin-Neuk\u00F6lln",
+    aktenzeichen: "OA-NK-2026-03991",
+    betreff: "Verwarnung wegen Ruhest\u00F6rung \u2013 Stellungnahme",
+    datum: "27.02.2026",
+    frist: "20.03.2026",
+    frist_iso: "2026-03-20",
+    tage_verbleibend: 16,
+    risiko: "niedrig",
+    erinnerungen: ["2026-03-13", "2026-03-17", "2026-03-19"],
+    zusammenfassung: "Gegen Sie liegt eine Beschwerde wegen Ruhest\u00F6rung vor. Sie haben Gelegenheit zur Stellungnahme.",
+    konsequenz: "Bei wiederholten Verst\u00F6\u00DFen Bu\u00DFgeld bis 5.000 \u20AC. Erste Verwarnung bleibt ohne Bu\u00DFgeld bei Stellungnahme.",
+    todos: [
+      { schritt: 1, text: "Sachverhalt pr\u00FCfen: Datum und Uhrzeit des Vorfalls", done: false },
+      { schritt: 2, text: "Stellungnahme verfassen", done: false },
+      { schritt: 3, text: "Fristgerecht einreichen", done: false },
+    ],
+    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n12043 Berlin\n\nOrdnungsamt Berlin-Neuk\u00F6lln\n12040 Berlin\n\nDatum: __.__._____\n\nAktenzeichen: OA-NK-2026-03991\n\nBetreff: Stellungnahme zur Verwarnung\n\nSehr geehrte Damen und Herren,\n\n[Ihre Stellungnahme]\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
+    versand_optionen: ["Einschreiben (Einwurf)", "Pers\u00F6nliche Abgabe"],
+  },
+  {
+    id: 107,
+    absender: "Krankenkasse AOK Bayern",
+    aktenzeichen: "AOK-BY-2026-881204",
+    betreff: "Beitragsr\u00FCckstand \u2013 Zahlungsaufforderung",
+    datum: "04.03.2026",
+    frist: "18.03.2026",
+    frist_iso: "2026-03-18",
+    tage_verbleibend: 14,
+    risiko: "hoch",
+    erinnerungen: ["2026-03-11", "2026-03-15", "2026-03-17"],
+    zusammenfassung: "R\u00FCckst\u00E4ndige Krankenversicherungsbeitr\u00E4ge in H\u00F6he von 847,20 \u20AC. Zahlungsfrist bereits einmal verl\u00E4ngert.",
+    konsequenz: "S\u00E4umniszuschlag 1 % pro Monat. Leistungseinschr\u00E4nkung auf Notfallversorgung bei weiterem Verzug.",
+    todos: [
+      { schritt: 1, text: "Kontostand pr\u00FCfen und Zahlung veranlassen", done: false },
+      { schritt: 2, text: "Falls Zahlung nicht m\u00F6glich: Ratenzahlung beantragen", done: false },
+      { schritt: 3, text: "Zahlungseingang best\u00E4tigen lassen", done: false },
+    ],
+    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n80331 M\u00FCnchen\n\nAOK Bayern\n80788 M\u00FCnchen\n\nDatum: __.__._____\n\nVersichertennummer: AOK-BY-2026-881204\n\nBetreff: Ratenzahlung Beitragsr\u00FCckstand\n\nSehr geehrte Damen und Herren,\n\nich bitte um Einr\u00E4umung einer Ratenzahlung.\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
+    versand_optionen: ["Einschreiben mit R\u00FCckschein", "Online \u00FCber Meine AOK"],
+  },
+  {
+    id: 108,
+    absender: "Bauamt Leipzig",
+    aktenzeichen: "BA-L-2026-05520",
+    betreff: "Aufforderung zum R\u00FCckbau \u2013 ungenehmigter Carport",
+    datum: "26.02.2026",
+    frist: "26.04.2026",
+    frist_iso: "2026-04-26",
+    tage_verbleibend: 53,
+    risiko: "niedrig",
+    erinnerungen: ["2026-04-19", "2026-04-23", "2026-04-25"],
+    zusammenfassung: "Das Bauamt stellt fest, dass ein Carport ohne Baugenehmigung errichtet wurde. Sie werden zum R\u00FCckbau oder zur nachtr\u00E4glichen Genehmigung aufgefordert.",
+    konsequenz: "Zwangsgeld bis 10.000 \u20AC bei Nichtbefolgung. Ersatzvornahme (R\u00FCckbau auf Ihre Kosten) m\u00F6glich.",
+    todos: [
+      { schritt: 1, text: "Pr\u00FCfen ob nachtr\u00E4gliche Genehmigung m\u00F6glich", done: false },
+      { schritt: 2, text: "Bauantrag vorbereiten oder R\u00FCckbau planen", done: false },
+      { schritt: 3, text: "Stellungnahme fristgerecht einreichen", done: false },
+    ],
+    antwort_vorlage: "Max Mustermann\nMusterstra\u00DFe 12\n04109 Leipzig\n\nBauamt Leipzig\n04092 Leipzig\n\nDatum: __.__._____\n\nAktenzeichen: BA-L-2026-05520\n\nBetreff: Stellungnahme zum R\u00FCckbaubescheid\n\nSehr geehrte Damen und Herren,\n\n[Ihre Stellungnahme]\n\nMit freundlichen Gr\u00FC\u00DFen\n\nMax Mustermann",
+    versand_optionen: ["Einschreiben mit R\u00FCckschein", "Pers\u00F6nliche Abgabe"],
   },
 ];
 
@@ -107,7 +361,7 @@ function Header({ onBack, title }) {
   return (
     <div style={{ display: "flex", alignItems: "center", padding: "16px 20px", borderBottom: "1px solid #E5E5E5", background: "#FAFAFA" }}>
       {onBack && (
-        <button onClick={onBack} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", marginRight: 12, color: "#1A1A1A", padding: 4 }}>\u2190</button>
+        <button onClick={onBack} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", marginRight: 12, color: "#1A1A1A", padding: 4 }}>{"\u2190"}</button>
       )}
       <span style={{ fontSize: 17, fontWeight: 600, color: "#1A1A1A", letterSpacing: "-0.2px" }}>{title}</span>
     </div>
@@ -136,11 +390,34 @@ function CountdownBadge({ tage }) {
   );
 }
 
+function BottomNav({ activeTab, onTabChange }) {
+  const tabs = [
+    { key: "briefe", label: "Briefe", icon: "\uD83D\uDCE8" },
+    { key: "kalender", label: "Kalender", icon: "\uD83D\uDCC5" },
+    { key: "nachweise", label: "Nachweise", icon: "\uD83D\uDCC1" },
+  ];
+  return (
+    <div style={{ borderTop: "1px solid #E5E5E5", padding: "10px 20px", display: "flex", justifyContent: "space-around", background: "#FAFAFA", flexShrink: 0 }}>
+      {tabs.map(({ key, label, icon }) => {
+        const active = activeTab === key;
+        return (
+          <button key={key} onClick={() => onTabChange(key)} style={{
+            background: "none", border: "none", cursor: "pointer", textAlign: "center", padding: "4px 12px",
+          }}>
+            <div style={{ fontSize: 20 }}>{icon}</div>
+            <div style={{ fontSize: 11, color: active ? "#1A1A1A" : "#999", fontWeight: active ? 700 : 500 }}>{label}</div>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 // Screens
 
 function HomeScreen({ onScan, onSelectLetter, letters }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+    <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
       <div style={{ padding: "24px 20px 12px", background: "#FAFAFA", borderBottom: "1px solid #E5E5E5" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
           <div style={{ width: 32, height: 32, borderRadius: 6, background: "#1A1A1A", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -148,7 +425,7 @@ function HomeScreen({ onScan, onSelectLetter, letters }) {
           </div>
           <span style={{ fontSize: 22, fontWeight: 700, color: "#1A1A1A", letterSpacing: "-0.5px" }}>FristRadar</span>
         </div>
-        <p style={{ fontSize: 13, color: "#666", margin: "6px 0 0 0" }}>Behördenpost im Griff. Fristen erkennen, handeln, nachweisen.</p>
+        <p style={{ fontSize: 13, color: "#666", margin: "6px 0 0 0" }}>Beh\u00F6rdenpost im Griff. Fristen erkennen, handeln, nachweisen.</p>
       </div>
 
       <div style={{ padding: "20px 20px 8px" }}>
@@ -186,14 +463,290 @@ function HomeScreen({ onScan, onSelectLetter, letters }) {
           </button>
         ))}
       </div>
+    </div>
+  );
+}
 
-      <div style={{ borderTop: "1px solid #E5E5E5", padding: "10px 20px", display: "flex", justifyContent: "space-around", background: "#FAFAFA" }}>
-        {[["Briefe", "\uD83D\uDCE8"], ["Kalender", "\uD83D\uDCC5"], ["Nachweise", "\uD83D\uDCC1"]].map(([label, ico]) => (
-          <div key={label} style={{ textAlign: "center", cursor: "pointer" }}>
-            <div style={{ fontSize: 20 }}>{ico}</div>
-            <div style={{ fontSize: 11, color: "#666", fontWeight: 500 }}>{label}</div>
+function CalendarScreen({ letters, onSelectLetter }) {
+  const [viewDate, setViewDate] = useState(() => {
+    const now = new Date();
+    return { year: now.getFullYear(), month: now.getMonth() };
+  });
+
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
+  const daysInMonth = new Date(viewDate.year, viewDate.month + 1, 0).getDate();
+  const firstDow = (new Date(viewDate.year, viewDate.month, 1).getDay() + 6) % 7; // Mon=0
+  const monthName = new Date(viewDate.year, viewDate.month).toLocaleString("de-DE", { month: "long", year: "numeric" });
+
+  const prevMonth = () => setViewDate(v => v.month === 0 ? { year: v.year - 1, month: 11 } : { ...v, month: v.month - 1 });
+  const nextMonth = () => setViewDate(v => v.month === 11 ? { year: v.year + 1, month: 0 } : { ...v, month: v.month + 1 });
+
+  // Build a map of date -> deadlines for the viewed month
+  const deadlineMap = {};
+  const reminderMap = {};
+  letters.forEach(l => {
+    if (l.frist_iso) {
+      const d = l.frist_iso;
+      if (!deadlineMap[d]) deadlineMap[d] = [];
+      deadlineMap[d].push(l);
+    }
+    if (l.erinnerungen) {
+      l.erinnerungen.forEach(r => {
+        if (!reminderMap[r]) reminderMap[r] = [];
+        reminderMap[r].push(l);
+      });
+    }
+  });
+
+  // Upcoming deadlines sorted by date
+  const upcoming = [...letters]
+    .filter(l => l.frist_iso)
+    .sort((a, b) => a.frist_iso.localeCompare(b.frist_iso));
+
+  const getReminderLabel = (letter) => {
+    if (!letter.frist_iso) return null;
+    const frist = new Date(letter.frist_iso);
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    const diff = Math.round((frist - now) / (1000 * 60 * 60 * 24));
+    if (diff === 1) return "T-1";
+    if (diff === 3) return "T-3";
+    if (diff === 7) return "T-7";
+    if (diff <= 7 && diff > 0) return `T-${diff}`;
+    return null;
+  };
+
+  const dayNames = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
+      <div style={{ padding: "20px 20px 12px", background: "#FAFAFA", borderBottom: "1px solid #E5E5E5" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <button onClick={prevMonth} style={{ background: "none", border: "none", fontSize: 22, cursor: "pointer", padding: "4px 12px", color: "#1A1A1A" }}>{"\u2039"}</button>
+          <span style={{ fontSize: 17, fontWeight: 700, color: "#1A1A1A", textTransform: "capitalize" }}>{monthName}</span>
+          <button onClick={nextMonth} style={{ background: "none", border: "none", fontSize: 22, cursor: "pointer", padding: "4px 12px", color: "#1A1A1A" }}>{"\u203A"}</button>
+        </div>
+      </div>
+
+      <div style={{ flex: 1, overflowY: "auto" }}>
+        {/* Calendar grid */}
+        <div style={{ padding: "12px 16px 0" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 2, textAlign: "center" }}>
+            {dayNames.map(d => (
+              <div key={d} style={{ fontSize: 11, fontWeight: 600, color: "#999", padding: "4px 0" }}>{d}</div>
+            ))}
+            {[...Array(firstDow)].map((_, i) => <div key={`e${i}`} />)}
+            {[...Array(daysInMonth)].map((_, i) => {
+              const day = i + 1;
+              const dateStr = `${viewDate.year}-${String(viewDate.month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+              const isToday = dateStr === todayStr;
+              const deadlines = deadlineMap[dateStr] || [];
+              const reminders = reminderMap[dateStr] || [];
+              const hasDot = deadlines.length > 0 || reminders.length > 0;
+              const dotColor = deadlines.length > 0
+                ? RISK_MAP[deadlines[0].risiko]?.color || "#999"
+                : reminders.length > 0 ? "#6B7280" : null;
+
+              return (
+                <div key={day} style={{
+                  position: "relative", padding: "6px 0", cursor: hasDot ? "pointer" : "default",
+                }} onClick={() => {
+                  if (deadlines.length > 0) onSelectLetter(deadlines[0]);
+                }}>
+                  <div style={{
+                    width: 32, height: 32, margin: "0 auto", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
+                    background: isToday ? "#1A1A1A" : "transparent", color: isToday ? "#fff" : "#1A1A1A",
+                    fontSize: 13, fontWeight: isToday ? 700 : 400,
+                  }}>
+                    {day}
+                  </div>
+                  {hasDot && (
+                    <div style={{
+                      width: 6, height: 6, borderRadius: "50%", background: dotColor,
+                      margin: "2px auto 0",
+                    }} />
+                  )}
+                </div>
+              );
+            })}
           </div>
-        ))}
+        </div>
+
+        {/* Legend */}
+        <div style={{ display: "flex", gap: 14, padding: "12px 20px", justifyContent: "center" }}>
+          {[["hoch", "Hohes R."], ["mittel", "Mittleres R."], ["niedrig", "Geringes R."]].map(([key, label]) => (
+            <div key={key} style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: "#666" }}>
+              <div style={{ width: 6, height: 6, borderRadius: "50%", background: RISK_MAP[key].color }} />
+              {label}
+            </div>
+          ))}
+        </div>
+
+        {/* Upcoming deadlines list */}
+        <div style={{ padding: "4px 20px 20px" }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: "#999", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 10 }}>
+            Anstehende Fristen
+          </div>
+          {upcoming.map(l => {
+            const reminder = getReminderLabel(l);
+            return (
+              <button key={l.id} onClick={() => onSelectLetter(l)} style={{
+                width: "100%", textAlign: "left", background: "#fff", border: "1px solid #E5E5E5", borderRadius: 10,
+                padding: "12px 14px", marginBottom: 8, cursor: "pointer", transition: "border-color 0.15s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = "#B0B0B0"}
+              onMouseLeave={e => e.currentTarget.style.borderColor = "#E5E5E5"}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: "#1A1A1A" }}>{l.absender}</span>
+                  <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                    {reminder && (
+                      <span style={{
+                        fontSize: 10, fontWeight: 700, color: "#fff", background: RISK_MAP[l.risiko].color,
+                        padding: "2px 6px", borderRadius: 3,
+                      }}>{reminder}</span>
+                    )}
+                    <Badge risiko={l.risiko} />
+                  </div>
+                </div>
+                <p style={{ fontSize: 12, color: "#555", margin: "0 0 6px", lineHeight: 1.3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{l.betreff}</p>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: 12, color: "#999" }}>Frist: {l.frist}</span>
+                  <CountdownBadge tage={l.tage_verbleibend} />
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NachweiseScreen({ letters, onSelectLetter }) {
+  const [nachweise, setNachweise] = useState(() => {
+    const map = {};
+    letters.forEach(l => { map[l.id] = { status: "offen", belege: [] }; });
+    return map;
+  });
+
+  const markSent = (id) => {
+    setNachweise(prev => ({
+      ...prev,
+      [id]: { ...prev[id], status: "versendet" },
+    }));
+  };
+
+  const addBeleg = (id) => {
+    setNachweise(prev => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        status: "nachgewiesen",
+        belege: [...prev[id].belege, {
+          type: "Einschreiben",
+          datum: new Date().toLocaleDateString("de-DE"),
+          beleg: true,
+        }],
+      },
+    }));
+  };
+
+  const statusConfig = {
+    offen: { label: "Offen", color: "#C41E3A", bg: "#FFF0F0" },
+    versendet: { label: "Versendet", color: "#CC7A00", bg: "#FFF8EC" },
+    nachgewiesen: { label: "Nachgewiesen", color: "#2D7D46", bg: "#F0FFF4" },
+  };
+
+  const counts = { offen: 0, versendet: 0, nachgewiesen: 0 };
+  letters.forEach(l => { counts[nachweise[l.id]?.status || "offen"]++; });
+
+  const summaryParts = [];
+  if (counts.versendet > 0) summaryParts.push(`${counts.versendet} versendet`);
+  if (counts.nachgewiesen > 0) summaryParts.push(`${counts.nachgewiesen} nachgewiesen`);
+  if (counts.offen > 0) summaryParts.push(`${counts.offen} offen`);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
+      <div style={{ padding: "20px 20px 14px", background: "#FAFAFA", borderBottom: "1px solid #E5E5E5" }}>
+        <span style={{ fontSize: 17, fontWeight: 700, color: "#1A1A1A" }}>Nachweise</span>
+        <p style={{ fontSize: 13, color: "#666", margin: "4px 0 0" }}>Versandnachweise f\u00FCr Ihre Beh\u00F6rdenpost</p>
+      </div>
+
+      <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px 20px" }}>
+        {/* Summary bar */}
+        <div style={{
+          background: "#fff", border: "1px solid #E5E5E5", borderRadius: 10, padding: "12px 16px", marginBottom: 16,
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+        }}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: "#1A1A1A" }}>{letters.length} Briefe</span>
+          <span style={{ fontSize: 12, color: "#666" }}>{summaryParts.join(", ")}</span>
+        </div>
+
+        {/* Letter cards */}
+        {letters.map(l => {
+          const nw = nachweise[l.id] || { status: "offen", belege: [] };
+          const sc = statusConfig[nw.status];
+          return (
+            <div key={l.id} style={{
+              background: "#fff", border: "1px solid #E5E5E5", borderRadius: 10,
+              padding: 16, marginBottom: 12,
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: 8 }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: "#1A1A1A", marginBottom: 2 }}>{l.absender}</div>
+                  <div style={{ fontSize: 12, color: "#555", lineHeight: 1.3 }}>{l.betreff}</div>
+                </div>
+                <span style={{
+                  fontSize: 11, fontWeight: 600, color: sc.color, background: sc.bg,
+                  padding: "3px 8px", borderRadius: 4, whiteSpace: "nowrap", marginLeft: 8,
+                }}>{sc.label}</span>
+              </div>
+
+              {/* Proof items */}
+              {nw.belege.length > 0 && (
+                <div style={{ marginBottom: 10, borderTop: "1px solid #F0F0F0", paddingTop: 10 }}>
+                  {nw.belege.map((b, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4, fontSize: 12 }}>
+                      <div style={{
+                        width: 32, height: 32, background: "#F0F0F0", borderRadius: 6,
+                        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14,
+                      }}>{"\uD83D\uDCCE"}</div>
+                      <div>
+                        <div style={{ fontWeight: 600, color: "#1A1A1A" }}>{b.type}</div>
+                        <div style={{ color: "#999" }}>{b.datum}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Action buttons */}
+              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                {nw.status === "offen" && (
+                  <button onClick={() => markSent(l.id)} style={{
+                    flex: 1, padding: "10px 0", background: "#1A1A1A", color: "#fff", border: "none",
+                    borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer",
+                  }}>Als versendet markieren</button>
+                )}
+                {nw.status !== "nachgewiesen" && (
+                  <button onClick={() => addBeleg(l.id)} style={{
+                    flex: 1, padding: "10px 0", background: "#fff", color: "#1A1A1A",
+                    border: "1px solid #DDD", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer",
+                  }}>Beleg hinzuf\u00FCgen</button>
+                )}
+                {nw.status === "nachgewiesen" && (
+                  <div style={{
+                    flex: 1, padding: "10px 0", textAlign: "center",
+                    fontSize: 12, fontWeight: 600, color: "#2D7D46",
+                  }}>{"\u2713"} Vollst\u00E4ndig nachgewiesen</div>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -346,7 +899,7 @@ function AnalyzingScreen({ onDone }) {
   );
 }
 
-function DetailScreen({ letter, onBack }) {
+function DetailScreen({ letter, onBack, onGoToCalendar }) {
   const [tab, setTab] = useState("uebersicht");
   const [todos, setTodos] = useState(letter.todos);
   const [sent, setSent] = useState(false);
@@ -399,7 +952,7 @@ function DetailScreen({ letter, onBack }) {
             </div>
 
             <div style={{ background: RISK_MAP[letter.risiko].bg, border: `1px solid ${RISK_MAP[letter.risiko].color}33`, borderRadius: 10, padding: 16, marginBottom: 14 }}>
-              <div style={{ fontSize: 11, color: RISK_MAP[letter.risiko].color, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: 6 }}>Was passiert bei Fristversäumnis?</div>
+              <div style={{ fontSize: 11, color: RISK_MAP[letter.risiko].color, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: 6 }}>Was passiert bei Fristvers\u00E4umnis?</div>
               <div style={{ fontSize: 14, color: "#333", lineHeight: 1.6 }}>{letter.konsequenz}</div>
             </div>
 
@@ -414,10 +967,10 @@ function DetailScreen({ letter, onBack }) {
               </div>
             </div>
 
-            <button style={{
+            <button onClick={onGoToCalendar} style={{
               width: "100%", padding: 14, background: "#1A1A1A", color: "#fff", border: "none", borderRadius: 8,
               fontSize: 14, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            }}>\uD83D\uDCC5 Erinnerungen im Kalender setzen</button>
+            }}>{"\uD83D\uDCC5"} Erinnerungen im Kalender setzen</button>
           </div>
         )}
 
@@ -441,7 +994,7 @@ function DetailScreen({ letter, onBack }) {
                   width: 22, height: 22, borderRadius: 6, border: t.done ? "none" : "2px solid #CCC", background: t.done ? "#1A1A1A" : "#fff",
                   display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1, transition: "all 0.15s",
                 }}>
-                  {t.done && <span style={{ color: "#fff", fontSize: 13, fontWeight: 700 }}>\u2713</span>}
+                  {t.done && <span style={{ color: "#fff", fontSize: 13, fontWeight: 700 }}>{"\u2713"}</span>}
                 </div>
                 <div>
                   <span style={{ fontSize: 12, fontWeight: 600, color: "#999" }}>Schritt {t.schritt}</span>
@@ -483,7 +1036,7 @@ function DetailScreen({ letter, onBack }) {
               width: "100%", padding: 14, background: "#fff", color: "#1A1A1A", border: "1px solid #DDD", borderRadius: 8,
               fontSize: 14, fontWeight: 600, cursor: "pointer",
             }}>
-              \u2197 Als PDF exportieren (DIN 5008)
+              {"\u2197"} Als PDF exportieren (DIN 5008)
             </button>
           </div>
         )}
@@ -492,7 +1045,7 @@ function DetailScreen({ letter, onBack }) {
           <div>
             <div style={{ background: "#F8F8F8", border: "1px solid #E5E5E5", borderRadius: 10, padding: 16, marginBottom: 14 }}>
               <p style={{ fontSize: 13, color: "#555", lineHeight: 1.5, margin: 0 }}>
-                Dokumentieren Sie Ihren Versand: Foto vom Einlieferungsbeleg, Sendungsnummer, Fax-Protokoll oder Empfangsbestätigung.
+                Dokumentieren Sie Ihren Versand: Foto vom Einlieferungsbeleg, Sendungsnummer, Fax-Protokoll oder Empfangsbest\u00E4tigung.
               </p>
             </div>
 
@@ -502,24 +1055,24 @@ function DetailScreen({ letter, onBack }) {
                   width: "100%", padding: 14, background: "#1A1A1A", color: "#fff", border: "none", borderRadius: 8,
                   fontSize: 14, fontWeight: 600, cursor: "pointer", marginBottom: 10,
                 }}>
-                  \u2713 Ich habe es abgeschickt
+                  {"\u2713"} Ich habe es abgeschickt
                 </button>
                 <button style={{
                   width: "100%", padding: 14, background: "#fff", color: "#1A1A1A", border: "1px solid #DDD", borderRadius: 8,
                   fontSize: 14, fontWeight: 600, cursor: "pointer",
                 }}>
-                  \uD83D\uDCF7 Beleg fotografieren
+                  {"\uD83D\uDCF7"} Beleg fotografieren
                 </button>
               </div>
             ) : (
               <div style={{ background: "#F0FFF4", border: "1px solid #2D7D4633", borderRadius: 10, padding: 16, textAlign: "center" }}>
-                <div style={{ fontSize: 32, marginBottom: 8 }}>\u2713</div>
+                <div style={{ fontSize: 32, marginBottom: 8 }}>{"\u2713"}</div>
                 <div style={{ fontSize: 15, fontWeight: 600, color: "#2D7D46" }}>Als versendet markiert</div>
-                <div style={{ fontSize: 13, color: "#666", marginTop: 4 }}>19.02.2026 \u2013 Beleg noch hinzufügen?</div>
+                <div style={{ fontSize: 13, color: "#666", marginTop: 4 }}>19.02.2026 {"\u2013"} Beleg noch hinzuf\u00FCgen?</div>
                 <button style={{
                   marginTop: 12, padding: "10px 20px", background: "#fff", border: "1px solid #DDD", borderRadius: 8,
                   fontSize: 13, fontWeight: 600, cursor: "pointer",
-                }}>\uD83D\uDCF7 Beleg hinzufügen</button>
+                }}>{"\uD83D\uDCF7"} Beleg hinzuf\u00FCgen</button>
               </div>
             )}
           </div>
@@ -532,19 +1085,54 @@ function DetailScreen({ letter, onBack }) {
 // App
 
 export default function App() {
+  const [authed, setAuthed] = useState(() => localStorage.getItem(AUTH_KEY) === "1");
   const [screen, setScreen] = useState("home");
+  const [activeTab, setActiveTab] = useState("briefe");
   const [selectedLetter, setSelectedLetter] = useState(null);
-  const [demoIndex, setDemoIndex] = useState(0);
+  const [backlogIndex, setBacklogIndex] = useState(0);
+  const [scannedLetters, setScannedLetters] = useState([]);
+
+  // All visible letters = initial DEMO_LETTERS + scanned ones
+  const allLetters = [...DEMO_LETTERS, ...scannedLetters];
+
+  if (!authed) return <LockScreen onUnlock={() => setAuthed(true)} />;
 
   const handleCapture = () => {
     setScreen("analyzing");
   };
 
   const handleAnalyzed = () => {
-    setSelectedLetter(DEMO_LETTERS[demoIndex]);
-    setDemoIndex(prev => (prev + 1) % DEMO_LETTERS.length);
+    const nextLetter = BACKLOG_LETTERS[backlogIndex % BACKLOG_LETTERS.length];
+    setScannedLetters(prev => [...prev, nextLetter]);
+    setSelectedLetter(nextLetter);
+    setBacklogIndex(prev => prev + 1);
     setScreen("detail");
   };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (tab === "briefe") setScreen("home");
+    else if (tab === "kalender") setScreen("calendar");
+    else if (tab === "nachweise") setScreen("nachweise");
+  };
+
+  const handleSelectLetter = (l) => {
+    setSelectedLetter(l);
+    setScreen("detail");
+  };
+
+  const handleBack = () => {
+    if (activeTab === "kalender") setScreen("calendar");
+    else if (activeTab === "nachweise") setScreen("nachweise");
+    else setScreen("home");
+  };
+
+  const handleGoToCalendar = () => {
+    setActiveTab("kalender");
+    setScreen("calendar");
+  };
+
+  const showBottomNav = screen === "home" || screen === "calendar" || screen === "nachweise";
 
   return (
     <div style={{
@@ -555,19 +1143,34 @@ export default function App() {
     }}>
       {screen === "home" && (
         <HomeScreen
-          letters={DEMO_LETTERS}
+          letters={allLetters}
           onScan={() => setScreen("camera")}
-          onSelectLetter={(l) => { setSelectedLetter(l); setScreen("detail"); }}
+          onSelectLetter={handleSelectLetter}
+        />
+      )}
+      {screen === "calendar" && (
+        <CalendarScreen
+          letters={allLetters}
+          onSelectLetter={handleSelectLetter}
+        />
+      )}
+      {screen === "nachweise" && (
+        <NachweiseScreen
+          letters={allLetters}
+          onSelectLetter={handleSelectLetter}
         />
       )}
       {screen === "camera" && (
-        <CameraScreen onCapture={handleCapture} onClose={() => setScreen("home")} />
+        <CameraScreen onCapture={handleCapture} onClose={() => handleTabChange(activeTab)} />
       )}
       {screen === "analyzing" && (
         <AnalyzingScreen onDone={handleAnalyzed} />
       )}
       {screen === "detail" && selectedLetter && (
-        <DetailScreen letter={selectedLetter} onBack={() => setScreen("home")} />
+        <DetailScreen letter={selectedLetter} onBack={handleBack} onGoToCalendar={handleGoToCalendar} />
+      )}
+      {showBottomNav && (
+        <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
       )}
     </div>
   );

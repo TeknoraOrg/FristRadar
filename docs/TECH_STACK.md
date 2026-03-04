@@ -32,56 +32,104 @@ Expo is the officially recommended way to start React Native projects (per React
 
 ## 2. OCR STRATEGY
 
-### Recommendation: Hybrid -- On-Device First, Cloud Fallback
+### Recommendation: Hybrid -- On-Device First, LLM Vision Fallback
 
-**Layer 1 -- On-device OCR (free, private, fast)**:
+**Informed by Invotract** (our sister project [TeknoraOrg/invotract](https://github.com/TeknoraOrg/invotract)): Invotract skips dedicated OCR entirely for scanned documents and relies on LLM vision capabilities (Claude, GPT-4o, Qwen2.5-VL) to read document images directly. For text-based PDFs it uses **PyMuPDF (fitz)** to extract text natively. This "no-OCR OCR" approach is simpler, more accurate on German government letters, and avoids maintaining a separate OCR pipeline.
+
+**Layer 1 -- On-device text extraction (free, private, fast)**:
 
 Use `expo-text-extractor`, which wraps:
 - **Android**: Google ML Kit Text Recognition (~0.05s per frame, supports German umlauts)
 - **iOS**: Apple Vision framework (~0.31s, accurate with "language correction" mode)
 
-All processing stays on-device. Zero cloud dependency.
+All processing stays on-device. Zero cloud dependency. Sufficient for clean, printed government letters.
 
-**Layer 2 -- Cloud OCR for complex documents (premium feature)**:
+**Layer 2 -- LLM Vision for scanned/complex documents (premium feature)**:
 
-For handwritten annotations, faded ink, or poor quality: **Azure Document Intelligence** (EU Frankfurt region):
-- Outperforms AWS Textract and Google Document AI for irregular documents
-- Supports custom model training
+Following the Invotract pattern: send document images directly to vision-capable LLMs instead of a separate cloud OCR service. The LLM performs OCR + extraction in a single pass, eliminating an entire pipeline step.
+
+- **Claude Sonnet**: Native PDF support via `document` content type (base64) -- no preprocessing needed
+- **GPT-4o**: Requires PDF-to-PNG conversion first (PyMuPDF at 200 DPI), then sends as `image_url`
+- **Qwen2.5-VL 7B** (via Ollama, self-hosted): Local vision model for privacy-sensitive users
+
+**Invotract's smart routing** (adopted for FristRadar):
+- If PDF has a text layer (>100 chars extracted by PyMuPDF) → send extracted text to a cheaper text-only model
+- If scanned/image-only → convert to PNG → send to vision model
+- This saves ~60% on LLM costs for text-based PDFs
+
+**Layer 3 -- Azure Document Intelligence (optional, complex cases)**:
+
+Retained as a specialized fallback for handwritten annotations, faded ink, or documents where LLM vision still struggles:
 - EU region (Frankfurt) available
 - ~$1.50/1000 pages
+- Custom model training for recurring German form types
 
 | Solution | German Text | Handwriting | Privacy | Cost | Verdict |
 |----------|-------------|-------------|---------|------|---------|
 | **Google ML Kit (on-device)** | Good | No | Excellent | Free | Layer 1 (Android) |
 | **Apple Vision (on-device)** | Good | Limited | Excellent | Free | Layer 1 (iOS) |
+| **LLM Vision (Claude/GPT-4o)** | Excellent | Good | EU hosting | ~$0.003/page | Layer 2 (primary cloud) |
+| **Qwen2.5-VL via Ollama** | Good | Decent | Excellent (local) | GPU cost | Layer 2 (self-hosted) |
+| **Azure Doc Intelligence** | Excellent | Good | EU hosting | ~$1.50/1000 pages | Layer 3 (specialist fallback) |
 | **Tesseract (on-device)** | Decent | Poor | Excellent | Free | Inferior to ML Kit/Vision; skip |
-| **Azure Doc Intelligence** | Excellent | Good | EU hosting | ~$1.50/1000 pages | Layer 2 |
-| **Google Cloud Vision** | Excellent | Good | US-centric | ~$1.50/1000 pages | Less EU-friendly |
 
 ---
 
 ## 3. LLM / AI FOR CLASSIFICATION AND EXTRACTION
 
-### Recommendation: Google Gemini 2.5 Flash (primary) + Claude Haiku 4.5 (fallback)
+### Recommendation: Multi-Backend Architecture (Invotract pattern)
 
-**Why Gemini 2.5 Flash as primary**:
-- **Price**: $0.30/M input, $2.50/M output -- ~3x cheaper than Claude Haiku
+**Informed by Invotract**: Invotract uses a pluggable multi-backend architecture where the LLM performs both OCR (via vision) and structured extraction in a single API call. FristRadar adopts this pattern with a prioritized backend chain and strict JSON schema enforcement.
+
+### Backend Priority Chain
+
+**Primary -- Claude Sonnet 4.6** (via Anthropic API):
+- **Native PDF support**: Send base64-encoded PDFs directly as `document` content type -- no preprocessing pipeline
+- **Structured output**: `json_schema` format in `output_config` (GA, strict)
+- **Best German text quality**: Superior understanding of German legal/bureaucratic language
+- **Prompt caching**: Up to 90% cost savings for repeated document patterns
+- **Cost**: $3/M input, $15/M output (Sonnet); for high volume, Claude Haiku 4.5 at $1/M input, $5/M output
+
+**Secondary -- Gemini 2.5 Flash** (via Vertex AI EU):
+- **Price**: $0.30/M input, $2.50/M output -- cheapest vision model
 - **Vision**: Can process document images directly (~$0.0004 per scan)
 - **Structured output**: JSON schema enforcement
 - **EU data processing**: Available via Vertex AI EU
 - **Cost projection**: 100K scans/month = ~$60/month
+- **Use case**: High-volume processing, cost-sensitive batch operations
 
-**Why Claude Haiku 4.5 as fallback**:
-- Strict structured output support (GA)
-- Excels at text processing and formatting
-- Prompt caching: up to 90% cost savings for repeated patterns
-- $1/M input, $5/M output
+**Tertiary -- GPT-4o** (via OpenAI API):
+- Requires PDF-to-PNG preprocessing (no native PDF support, same limitation as in Invotract)
+- Strong structured output with `strict=True` validation
+- Good fallback if Anthropic/Google have outages
 
-**Extraction schema**:
+**Self-hosted option -- Ollama + Qwen2.5** (v2 roadmap):
+- Following Invotract's dual-model approach:
+  - **Qwen2.5-VL 7B**: Vision model for scanned documents
+  - **Qwen2.5 3B**: Text-only model for native PDFs (faster, lighter)
+- Smart routing: text-layer PDFs → text model, scanned → vision model
+- Full privacy: zero data leaves the server
+- Requires GPU (NVIDIA) -- suitable for enterprise on-premise deployments
+
+### Smart Document Routing (from Invotract)
+
+```
+[Document received]
+       ↓
+[PyMuPDF text extraction attempt]
+       ↓
+  extracted_chars >= 100?
+    ├── YES → Send text to text model (cheaper, faster)
+    └── NO  → Convert to PNG at 200 DPI → Send to vision model
+```
+
+This routing saves ~60% on LLM costs for text-based PDFs (majority of German government mail).
+
+### Extraction Schema
 
 ```json
 {
-  "letter_type": "Steuerbescheid | Mahnung | Anhörung | ...",
+  "letter_type": "Steuerbescheid | Mahnung | Anh\u00F6rung | ...",
   "sender": { "authority": "string", "department": "string" },
   "dates": {
     "letter_date": "YYYY-MM-DD",
@@ -96,6 +144,21 @@ For handwritten annotations, faded ink, or poor quality: **Azure Document Intell
   "summary": "string"
 }
 ```
+
+**Schema enforcement** (adopted from Invotract):
+- `additionalProperties: false` prevents hallucinated fields
+- Fields not found in document return `null` (not guessed values)
+- Currency: European decimal notation (comma) auto-converted to dot notation
+
+### Comparison
+
+| Backend | Vision | Native PDF | German Quality | Cost/1K pages | Latency | Verdict |
+|---------|--------|------------|----------------|---------------|---------|---------|
+| **Claude Sonnet** | Yes | Yes (base64) | Excellent | ~$4.50 | ~3s | Primary |
+| **Claude Haiku** | Yes | Yes | Very Good | ~$1.50 | ~1s | Primary (high volume) |
+| **Gemini 2.5 Flash** | Yes | No | Good | ~$0.40 | ~2s | Secondary (cost) |
+| **GPT-4o** | Yes | No (needs PNG) | Good | ~$5.00 | ~3s | Tertiary (fallback) |
+| **Qwen2.5-VL (Ollama)** | Yes | No (needs PNG) | Decent | GPU cost | ~5s | Self-hosted option |
 
 **On-device LLM (v2 roadmap, not MVP)**: Gemma 3n / Phi-4 mini can run on modern phones, but quality gap is too large for deadline extraction where accuracy is critical.
 
@@ -239,10 +302,13 @@ Hono.js API Server (Hetzner VPS, Nuremberg)
 | **Navigation** | Expo Router 6 | File-based routing, web + native |
 | **State** | TanStack Query + Zustand | Server state + local state |
 | **On-device OCR** | expo-text-extractor (ML Kit + Vision) | Free, private, fast |
-| **Cloud OCR** | Azure Document Intelligence (EU) | Best accuracy, custom training |
+| **PDF text extraction** | PyMuPDF (fitz) server-side | Smart routing: text PDFs skip vision model |
+| **Cloud OCR** | LLM Vision (primary) + Azure Doc Intelligence (fallback) | Single-pass OCR+extraction via Invotract pattern |
 | **Document scanning** | react-native-document-scanner-plugin | Auto-crop, edge detection |
-| **LLM (primary)** | Gemini 2.5 Flash via Vertex AI EU | Cheapest vision model with structured output |
-| **LLM (fallback)** | Claude Haiku 4.5 | Best text quality, strict structured outputs |
+| **LLM (primary)** | Claude Sonnet 4.6 via Anthropic API | Native PDF support, best German quality, strict schemas |
+| **LLM (high volume)** | Gemini 2.5 Flash via Vertex AI EU | Cheapest vision model with structured output |
+| **LLM (fallback)** | GPT-4o via OpenAI API | Strong structured output, availability hedge |
+| **LLM (self-hosted)** | Qwen2.5-VL + Qwen2.5 via Ollama | Enterprise on-premise, full privacy (v2) |
 | **Auth** | Supabase Auth (Frankfurt) | JWT, social login, email/password |
 | **Database** | Supabase PostgreSQL (Frankfurt) | RLS, real-time, managed |
 | **Backend API** | Hono.js on Hetzner VPS | EU hosting, long-running tasks, CLI access |
@@ -263,12 +329,13 @@ Hono.js API Server (Hetzner VPS, Nuremberg)
 |---------|------|
 | Hetzner VPS (CX22) | EUR 5.49 |
 | Supabase Pro | $25 |
-| Gemini Flash API (~50K scans) | ~$30 |
-| Azure Doc Intelligence (~5K premium) | ~$7.50 |
+| Claude Haiku API (~40K text-route scans) | ~$60 |
+| Gemini Flash API (~10K high-volume batch) | ~$4 |
+| Azure Doc Intelligence (~1K specialist) | ~$1.50 |
 | RevenueCat | Free (under $2,500 MTR) |
 | Expo Push | Free |
 | Domain + DNS | ~$1 |
-| **Total** | **~$70/month** |
+| **Total** | **~$98/month** |
 
 ---
 
@@ -278,6 +345,6 @@ Hono.js API Server (Hetzner VPS, Nuremberg)
 |------|--------|------------|
 | LLM misses a critical deadline | Critical | Show raw OCR text; user confirms/edits before saving |
 | German letter formats change | Medium | LLM-based extraction is format-agnostic |
-| Gemini pricing increases | Medium | Swap to Claude Haiku or GPT-4.1 nano via config |
+| LLM pricing increases | Medium | Multi-backend chain (Claude → Gemini → GPT-4o → Ollama); swap via config |
 | On-device OCR insufficient | Low | Cloud fallback layer (premium) |
 | Typst lacks DIN 5008 template | Low | DIN 5008 spec is well-documented; 1-2 day task |

@@ -296,30 +296,30 @@ Hono.js API Server (Hetzner VPS, Nuremberg)
 
 ## 8. COMPLETE STACK SUMMARY
 
-| Layer | Technology | Rationale |
-|-------|-----------|-----------|
-| **Mobile** | Expo (SDK 54) + React Native | Official recommendation, web support, largest ecosystem |
-| **Navigation** | Expo Router 6 | File-based routing, web + native |
-| **State** | TanStack Query + Zustand | Server state + local state |
-| **On-device OCR** | expo-text-extractor (ML Kit + Vision) | Free, private, fast |
-| **PDF text extraction** | PyMuPDF (fitz) server-side | Smart routing: text PDFs skip vision model |
-| **Cloud OCR** | LLM Vision (primary) + Azure Doc Intelligence (fallback) | Single-pass OCR+extraction via Invotract pattern |
-| **Document scanning** | react-native-document-scanner-plugin | Auto-crop, edge detection |
-| **LLM (primary)** | Claude Sonnet 4.6 via Anthropic API | Native PDF support, best German quality, strict schemas |
-| **LLM (high volume)** | Gemini 2.5 Flash via Vertex AI EU | Cheapest vision model with structured output |
-| **LLM (fallback)** | GPT-4o via OpenAI API | Strong structured output, availability hedge |
-| **LLM (self-hosted)** | Qwen2.5-VL + Qwen2.5 via Ollama | Enterprise on-premise, full privacy (v2) |
-| **Auth** | Supabase Auth (Frankfurt) | JWT, social login, email/password |
-| **Database** | Supabase PostgreSQL (Frankfurt) | RLS, real-time, managed |
-| **Backend API** | Hono.js on Hetzner VPS | EU hosting, long-running tasks, CLI access |
-| **PDF generation** | Typst (server-side) | Fast, precise DIN 5008 layout |
-| **Calendar** | expo-calendar + ics npm package | Native calendar write + .ics export |
-| **Payments (mobile)** | RevenueCat | Unified iOS/Android/Web subscriptions |
-| **Payments (web)** | Stripe via RevenueCat Web Billing | SEPA, German invoice compliance |
-| **Push** | Expo Push Notifications | Free, managed |
-| **Storage** | Supabase Storage (Frankfurt) | Encrypted, EU-hosted |
-| **Hosting** | Hetzner VPS (Nuremberg) | EUR 3.79/month, German company, GDPR |
-| **CI/CD** | GitHub Actions | Free for public repos |
+| Layer | Technology | Rationale | Used In (Scenario) |
+|-------|-----------|-----------|-------------------|
+| **Mobile** | Expo (SDK 54) + React Native | Official recommendation, web support, largest ecosystem | Entire app shell -- iOS, Android, Web from one codebase |
+| **Navigation** | Expo Router 6 | File-based routing, web + native | Screen transitions: Briefe list --> Detail --> Response; bottom tab bar (Briefe/Kalender/Nachweise) |
+| **State** | TanStack Query + Zustand | Server state + local state | TanStack Query: letter data fetching/caching from API; Zustand: active tab, scan progress, proof status |
+| **Document scanning** | react-native-document-scanner-plugin | Auto-crop, edge detection | Camera screen: user photographs letter, plugin does edge detection, perspective correction, shadow removal |
+| **On-device OCR** | expo-text-extractor (ML Kit + Vision) | Free, private, fast | First pass after scan: extracts raw text on-device for free-tier users, no network needed |
+| **PDF text extraction** | PyMuPDF (fitz) server-side | Smart routing: text PDFs skip vision model | Digital PDF uploads: detects text layer to route to cheaper text-only LLM instead of vision model |
+| **Cloud OCR** | LLM Vision (primary) + Azure Doc Intelligence (fallback) | Single-pass OCR+extraction via Invotract pattern | Premium: scanned/handwritten letters where on-device OCR fails; Azure for faded ink, stamps, complex layouts |
+| **LLM (primary)** | Claude Sonnet 4.6 via Anthropic API | Native PDF support, best German quality, strict schemas | Core pipeline: classifies letter type, detects deadlines, risk assessment, action plan, response template -- single API call |
+| **LLM (high volume)** | Gemini 2.5 Flash via Vertex AI EU | Cheapest vision model with structured output | Batch operations: re-classification of old letters, bulk reminder text generation, cost-sensitive paths |
+| **LLM (fallback)** | GPT-4o via OpenAI API | Strong structured output, availability hedge | Same extraction pipeline when Claude/Gemini unavailable; requires PDF-to-PNG preprocessing |
+| **LLM (self-hosted)** | Qwen2.5-VL + Qwen2.5 via Ollama | Enterprise on-premise, full privacy (v2) | Law firms / tax advisors who cannot send client documents to external APIs |
+| **Auth** | Supabase Auth (Frankfurt) | JWT, social login, email/password | User registration, login, session management; social login (Google, Apple) for frictionless onboarding |
+| **Database** | Supabase PostgreSQL (Frankfurt) | RLS, real-time, managed | Stores extracted letter data, deadlines, user preferences; row-level security isolates per-user data; real-time sync across devices |
+| **Storage** | Supabase Storage (Frankfurt) | Encrypted, EU-hosted | Proof-of-delivery photos (posting receipts, tracking screenshots), original scan images (opt-in) |
+| **Backend API** | Hono.js on Hetzner VPS | EU hosting, long-running tasks, CLI access | API server: receives scans, orchestrates LLM calls, runs deadline cron jobs (T-7/T-3/T-1), generates PDFs, sends push |
+| **PDF generation** | Typst (server-side) | Fast, precise DIN 5008 layout | "Antwort" tab: generates print-ready response letters with auto-filled sender, reference number, fold marks, address window |
+| **Calendar** | expo-calendar + ics npm package | Native calendar write + .ics export | "Erinnerungen im Kalender setzen" button: writes deadline + T-7/T-3/T-1 to native calendar; .ics download for web users |
+| **Payments (mobile)** | RevenueCat | Unified iOS/Android/Web subscriptions | Paywall for premium: unlimited scans, PDF export, cloud OCR, auto-sync calendar |
+| **Payments (web)** | Stripe via RevenueCat Web Billing | SEPA, German invoice compliance | SEPA direct debit for German users; generates compliant invoices with Umsatzsteuer |
+| **Push** | Expo Push Notifications | Free, managed | Deadline reminders at T-7/T-3/T-1; urgent "Frist morgen!" alerts; proof follow-ups ("Beleg noch hinzufugen?") |
+| **Hosting** | Hetzner VPS (Nuremberg) | EUR 5.49/month, German company, GDPR | Runs Hono.js API + Typst CLI + cron scheduler; all data stays in Germany |
+| **CI/CD** | GitHub Actions | Free for public repos | Automated linting, tests, Expo EAS builds for iOS/Android, preview deployments for PRs |
 
 ---
 

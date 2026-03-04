@@ -54,24 +54,27 @@ Receipt photos, send date, recipient address, tracking ID -- all in one place pe
 
 ## Tech Stack
 
-| Layer | Technology | Rationale |
-|-------|-----------|-----------|
-| **Mobile** | Expo (SDK 54) + React Native | Single codebase for iOS, Android, Web |
-| **Navigation** | Expo Router 6 | File-based routing, web + native |
-| **State** | TanStack Query + Zustand | Server state + local state |
-| **Document Scanning** | react-native-document-scanner-plugin | Auto-crop, edge detection |
-| **On-device OCR** | expo-text-extractor (ML Kit + Apple Vision) | Free, private, fast |
-| **PDF Text Extraction** | PyMuPDF (fitz) server-side | Smart routing: text PDFs skip vision models |
-| **Cloud OCR** | LLM Vision + Azure Doc Intelligence fallback | Single-pass OCR + extraction |
-| **LLM (primary)** | Claude Sonnet 4.6 | Native PDF support, best German quality |
-| **LLM (high volume)** | Gemini 2.5 Flash (Vertex AI EU) | Cheapest vision model |
-| **LLM (fallback)** | GPT-4o | Availability hedge |
-| **LLM (self-hosted)** | Qwen2.5-VL + Qwen2.5 via Ollama | Enterprise on-premise (v2) |
-| **Backend** | Hono.js on Hetzner VPS (Nuremberg) | EU hosting, GDPR, EUR 5.49/mo |
-| **Database + Auth** | Supabase (Frankfurt) | PostgreSQL + RLS, Auth, Storage |
-| **PDF Generation** | Typst | DIN 5008 German business letters |
-| **Payments** | RevenueCat + Stripe | iOS/Android/Web + SEPA support |
-| **Push** | Expo Push Notifications | Free, managed |
+| Layer | Technology | Used In |
+|-------|-----------|---------|
+| **Mobile** | Expo (SDK 54) + React Native | Entire app shell -- runs on iOS, Android, and Web from one codebase |
+| **Navigation** | Expo Router 6 | Screen transitions: Briefe list --> Letter detail --> Response tab, bottom tab bar routing |
+| **State** | TanStack Query + Zustand | TanStack Query for fetching/caching letter data from API; Zustand for local UI state (active tab, scan progress, proof status) |
+| **Document Scanning** | react-native-document-scanner-plugin | Camera screen: user photographs a government letter, plugin handles edge detection, perspective correction, shadow removal |
+| **On-device OCR** | expo-text-extractor (ML Kit + Apple Vision) | First pass after scan: extracts raw text from the photo on-device, no network needed. Used for all free-tier users |
+| **PDF Text Extraction** | PyMuPDF (fitz) server-side | When user uploads a digital PDF instead of a photo: extracts text layer to decide if a cheaper text-only LLM call suffices |
+| **Cloud OCR** | LLM Vision + Azure Doc Intelligence fallback | Premium feature: scanned/handwritten letters where on-device OCR fails -- LLM reads the image directly; Azure for specialist cases (faded ink, stamps) |
+| **LLM (primary)** | Claude Sonnet 4.6 | Core extraction pipeline: classifies letter type, detects deadlines, generates risk assessment, creates action plan, drafts response template -- all from one API call |
+| **LLM (high volume)** | Gemini 2.5 Flash (Vertex AI EU) | Batch processing and cost-sensitive paths: re-classification of previously scanned letters, bulk reminder text generation |
+| **LLM (fallback)** | GPT-4o | Activated when Claude/Gemini are unavailable: same extraction pipeline, requires PDF-to-PNG preprocessing |
+| **LLM (self-hosted)** | Qwen2.5-VL + Qwen2.5 via Ollama | Enterprise/on-premise deployment (v2): law firms or tax advisors who cannot send client documents to external APIs |
+| **Backend** | Hono.js on Hetzner VPS (Nuremberg) | API server: receives scans, orchestrates LLM calls, runs deadline cron jobs (T-7/T-3/T-1 reminders), generates PDFs, sends push notifications |
+| **Database + Auth** | Supabase (Frankfurt) | User accounts (email/social login), stores extracted letter data + deadlines, row-level security per user, real-time sync across devices |
+| **Storage** | Supabase Storage (Frankfurt) | Encrypted storage for proof-of-delivery photos (posting receipts, tracking screenshots), original scan images (opt-in) |
+| **PDF Generation** | Typst | "Antwort" tab: generates ready-to-print response letters in DIN 5008 format with auto-filled sender, reference number, fold marks |
+| **Calendar** | expo-calendar + ics package | "Erinnerungen im Kalender setzen" button: writes deadline + T-7/T-3/T-1 reminders to native iOS/Android calendar; .ics export for web users |
+| **Payments** | RevenueCat + Stripe | Paywall for premium features (unlimited scans, PDF export, cloud OCR); SEPA direct debit for German users, App Store/Play Store IAP for mobile |
+| **Push** | Expo Push Notifications | Deadline reminders at T-7, T-3, T-1 days; "Frist morgen!" urgent alerts; proof-of-delivery follow-ups ("Beleg noch hinzufugen?") |
+| **CI/CD** | GitHub Actions | Automated builds, linting, Expo EAS builds for iOS/Android, preview deployments for PRs |
 
 ### AI Architecture (Invotract Pattern)
 

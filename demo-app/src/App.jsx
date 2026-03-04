@@ -392,9 +392,9 @@ function CountdownBadge({ tage }) {
 
 function BottomNav({ activeTab, onTabChange }) {
   const tabs = [
-    { key: "briefe", label: "Briefe", icon: "��" },
-    { key: "kalender", label: "Kalender", icon: "��" },
-    { key: "nachweise", label: "Nachweise", icon: "��" },
+    { key: "briefe", label: "Briefe", icon: "\uD83D\uDCE8" },
+    { key: "kalender", label: "Kalender", icon: "\uD83D\uDCC5" },
+    { key: "nachweise", label: "Nachweise", icon: "\uD83D\uDCC1" },
   ];
   return (
     <div style={{ borderTop: "1px solid #E5E5E5", padding: "10px 20px", display: "flex", justifyContent: "space-around", background: "#FAFAFA", flexShrink: 0 }}>
@@ -713,7 +713,7 @@ function NachweiseScreen({ letters, onSelectLetter }) {
                       <div style={{
                         width: 32, height: 32, background: "#F0F0F0", borderRadius: 6,
                         display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14,
-                      }}>{"��"}</div>
+                      }}>{"\uD83D\uDCCE"}</div>
                       <div>
                         <div style={{ fontWeight: 600, color: "#1A1A1A" }}>{b.type}</div>
                         <div style={{ color: "#999" }}>{b.datum}</div>
@@ -970,7 +970,7 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
             <button onClick={onGoToCalendar} style={{
               width: "100%", padding: 14, background: "#1A1A1A", color: "#fff", border: "none", borderRadius: 8,
               fontSize: 14, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            }}>{"��"} Erinnerungen im Kalender setzen</button>
+            }}>{"\uD83D\uDCC5"} Erinnerungen im Kalender setzen</button>
           </div>
         )}
 
@@ -1021,7 +1021,7 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
               width: "100%", padding: 14, background: showVorlage ? "#F5F5F5" : "#1A1A1A", color: showVorlage ? "#1A1A1A" : "#fff",
               border: showVorlage ? "1px solid #DDD" : "none", borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: "pointer", marginBottom: 14,
             }}>
-              {showVorlage ? "Vorlage ausblenden" : "�� Antwortvorlage anzeigen"}
+              {showVorlage ? "Vorlage ausblenden" : "\uD83D\uDCC4 Antwortvorlage anzeigen"}
             </button>
 
             {showVorlage && (
@@ -1061,7 +1061,7 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
                   width: "100%", padding: 14, background: "#fff", color: "#1A1A1A", border: "1px solid #DDD", borderRadius: 8,
                   fontSize: 14, fontWeight: 600, cursor: "pointer",
                 }}>
-                  {"��"} Beleg fotografieren
+                  {"\uD83D\uDCF7"} Beleg fotografieren
                 </button>
               </div>
             ) : (
@@ -1072,7 +1072,7 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
                 <button style={{
                   marginTop: 12, padding: "10px 20px", background: "#fff", border: "1px solid #DDD", borderRadius: 8,
                   fontSize: 13, fontWeight: 600, cursor: "pointer",
-                }}>{"��"} Beleg hinzufügen</button>
+                }}>{"\uD83D\uDCF7"} Beleg hinzufügen</button>
               </div>
             )}
           </div>

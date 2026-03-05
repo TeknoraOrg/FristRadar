@@ -19,7 +19,7 @@ const queryClient = new QueryClient({
 });
 
 function AuthGuard() {
-  const { status, user } = useAuthContext();
+  const { status, onboardingCompleted } = useAuthContext();
   const segments = useSegments();
   const router = useRouter();
 
@@ -28,16 +28,17 @@ function AuthGuard() {
 
     const inAuthGroup = segments[0] === '(auth)';
     const inOnboardingGroup = segments[0] === '(onboarding)';
-    const inAppGroup = segments[0] === '(app)';
 
-    if (status === 'unauthenticated') {
+    if (status === 'setup-password') {
       if (!inAuthGroup) {
-        router.replace('/(auth)/sign-in');
+        router.replace('/(auth)/setup-password');
       }
-    } else if (status === 'verify-email') {
-      router.replace('/(auth)/verify-email');
-    } else if (status === 'authenticated') {
-      if (user && !user.onboarding_completed) {
+    } else if (status === 'locked') {
+      if (!inAuthGroup) {
+        router.replace('/(auth)/unlock');
+      }
+    } else if (status === 'unlocked') {
+      if (!onboardingCompleted) {
         if (!inOnboardingGroup) {
           router.replace('/(onboarding)/language');
         }
@@ -45,7 +46,7 @@ function AuthGuard() {
         router.replace('/(app)/(tabs)');
       }
     }
-  }, [status, user, segments, router]);
+  }, [status, onboardingCompleted, segments, router]);
 
   return <Slot />;
 }

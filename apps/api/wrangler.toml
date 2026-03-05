@@ -11,10 +11,5 @@ database_name = "fristradar-db"
 database_id = "TODO_CREATE_WITH_WRANGLER"
 migrations_dir = "drizzle/migrations"
 
-[[kv_namespaces]]
-binding = "RATE_LIMITER"
-id = "TODO_CREATE_WITH_WRANGLER"
-preview_id = "TODO_CREATE_WITH_WRANGLER"
-
 [dev]
 port = 8787

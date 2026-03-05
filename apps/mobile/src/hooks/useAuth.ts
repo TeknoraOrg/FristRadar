@@ -1,21 +1,22 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import * as api from '../lib/api';
-import * as tokenStorage from '../lib/tokenStorage';
-import type { User, UpdateUserInput } from '../types';
+import * as Crypto from 'expo-crypto';
+import * as store from '../lib/tokenStorage';
 
-export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated' | 'verify-email';
+export type AuthStatus = 'loading' | 'setup-password' | 'locked' | 'unlocked';
 
 interface AuthState {
   status: AuthStatus;
-  user: User | null;
-  pendingEmail: string | null;
+  onboardingCompleted: boolean;
+}
+
+async function hashPassword(password: string): Promise<string> {
+  return Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, password);
 }
 
 export function useAuth() {
   const [state, setState] = useState<AuthState>({
     status: 'loading',
-    user: null,
-    pendingEmail: null,
+    onboardingCompleted: false,
   });
   const mountedRef = useRef(true);
 
@@ -28,135 +29,56 @@ export function useAuth() {
     if (mountedRef.current) setState(updater);
   }, []);
 
-  // Bootstrap: check for existing tokens and load user
   useEffect(() => {
     (async () => {
       try {
-        const { accessToken } = await tokenStorage.getTokens();
-        if (!accessToken) {
-          setIfMounted(() => ({ status: 'unauthenticated', user: null, pendingEmail: null }));
-          return;
-        }
-
-        // Try to load cached user first for fast startup
-        const cachedUser = await tokenStorage.getUser();
-        if (cachedUser) {
-          setIfMounted(() => ({ status: 'authenticated', user: cachedUser, pendingEmail: null }));
-        }
-
-        // Then refresh from server
-        try {
-          const freshUser = await api.getMe();
-          await tokenStorage.saveUser(freshUser);
-          setIfMounted(() => ({ status: 'authenticated', user: freshUser, pendingEmail: null }));
-        } catch (err) {
-          if (err instanceof api.ApiError && err.status === 401) {
-            await tokenStorage.clearTokens();
-            setIfMounted(() => ({ status: 'unauthenticated', user: null, pendingEmail: null }));
-          }
-          // If network error but we have a cached user, stay authenticated
-          if (!cachedUser) {
-            setIfMounted(() => ({ status: 'unauthenticated', user: null, pendingEmail: null }));
-          }
+        const [hasPass, onboarded] = await Promise.all([
+          store.hasPassword(),
+          store.getOnboardingCompleted(),
+        ]);
+        if (!hasPass) {
+          setIfMounted(() => ({ status: 'setup-password', onboardingCompleted: false }));
+        } else {
+          setIfMounted(() => ({ status: 'locked', onboardingCompleted: onboarded }));
         }
       } catch {
-        setIfMounted(() => ({ status: 'unauthenticated', user: null, pendingEmail: null }));
+        setIfMounted(() => ({ status: 'setup-password', onboardingCompleted: false }));
       }
     })();
   }, [setIfMounted]);
 
-  const signIn = useCallback(async (email: string, password: string) => {
-    const result = await api.login(email, password);
-    await tokenStorage.saveTokens(result.access_token, result.refresh_token);
-    await tokenStorage.saveUser(result.user);
-    setIfMounted(() => ({ status: 'authenticated', user: result.user, pendingEmail: null }));
-    return result.user;
+  const setupPassword = useCallback(async (password: string) => {
+    const hash = await hashPassword(password);
+    await store.savePasswordHash(hash);
+    setIfMounted(() => ({ status: 'unlocked', onboardingCompleted: false }));
   }, [setIfMounted]);
 
-  const signUp = useCallback(async (params: {
-    email: string;
-    password: string;
-    first_name: string;
-    last_name: string;
-  }) => {
-    const result = await api.register(params);
-    if (result.access_token) {
-      // Server auto-verified or doesn't require email verification
-      await tokenStorage.saveTokens(result.access_token, result.refresh_token);
-      await tokenStorage.saveUser(result.user);
-      setIfMounted(() => ({ status: 'authenticated', user: result.user, pendingEmail: null }));
-    } else {
-      // Email verification required
-      setIfMounted((prev) => ({ ...prev, status: 'verify-email', pendingEmail: params.email }));
+  const unlock = useCallback(async (password: string): Promise<boolean> => {
+    const storedHash = await store.getPasswordHash();
+    if (!storedHash) return false;
+    const inputHash = await hashPassword(password);
+    if (inputHash === storedHash) {
+      setIfMounted((prev) => ({ ...prev, status: 'unlocked' }));
+      return true;
     }
+    return false;
   }, [setIfMounted]);
 
-  const verifyOtp = useCallback(async (email: string, code: string) => {
-    const result = await api.verifyOtp(email, code);
-    await tokenStorage.saveTokens(result.access_token, result.refresh_token);
-    await tokenStorage.saveUser(result.user);
-    setIfMounted(() => ({ status: 'authenticated', user: result.user, pendingEmail: null }));
-    return result.user;
+  const lock = useCallback(() => {
+    setIfMounted((prev) => ({ ...prev, status: 'locked' }));
   }, [setIfMounted]);
 
-  const resendVerificationEmail = useCallback(async (email: string) => {
-    await api.resendVerification(email);
-  }, []);
-
-  const signOut = useCallback(async () => {
-    try {
-      await api.logout();
-    } catch {
-      // Still clear local tokens even if server call fails
-    }
-    await tokenStorage.clearTokens();
-    setIfMounted(() => ({ status: 'unauthenticated', user: null, pendingEmail: null }));
-  }, [setIfMounted]);
-
-  const resetPasswordForEmail = useCallback(async (email: string) => {
-    await api.forgotPassword(email);
-    await tokenStorage.setPasswordRecoveryFlag(true);
-  }, []);
-
-  const updatePassword = useCallback(async (token: string, newPassword: string) => {
-    const result = await api.resetPassword(token, newPassword);
-    await tokenStorage.saveTokens(result.access_token, result.refresh_token);
-    await tokenStorage.saveUser(result.user);
-    await tokenStorage.setPasswordRecoveryFlag(false);
-    setIfMounted(() => ({ status: 'authenticated', user: result.user, pendingEmail: null }));
-    return result.user;
-  }, [setIfMounted]);
-
-  const refreshProfile = useCallback(async () => {
-    try {
-      const user = await api.getMe();
-      await tokenStorage.saveUser(user);
-      setIfMounted((prev) => ({ ...prev, user }));
-      return user;
-    } catch {
-      return state.user;
-    }
-  }, [setIfMounted, state.user]);
-
-  const updateProfile = useCallback(async (data: UpdateUserInput) => {
-    const user = await api.updateMe(data);
-    await tokenStorage.saveUser(user);
-    setIfMounted((prev) => ({ ...prev, user }));
-    return user;
+  const completeOnboarding = useCallback(async () => {
+    await store.setOnboardingCompleted(true);
+    setIfMounted((prev) => ({ ...prev, onboardingCompleted: true }));
   }, [setIfMounted]);
 
   return {
     status: state.status,
-    user: state.user,
-    pendingEmail: state.pendingEmail,
-    signIn,
-    signUp,
-    signOut,
-    verifyOtp,
-    resendVerificationEmail,
-    resetPasswordForEmail,
-    updatePassword,
-    refreshProfile,
-    updateProfile,
+    onboardingCompleted: state.onboardingCompleted,
+    setupPassword,
+    unlock,
+    lock,
+    completeOnboarding,
   };
 }

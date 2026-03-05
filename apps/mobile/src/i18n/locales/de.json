@@ -14,105 +14,28 @@
     "done": "Fertig"
   },
   "auth": {
-    "signIn": {
-      "title": "Anmelden",
-      "subtitle": "Willkommen zurueck bei FristRadar",
-      "emailLabel": "E-Mail",
-      "emailPlaceholder": "deine@email.de",
+    "setupPassword": {
+      "title": "Passwort einrichten",
+      "subtitle": "Dieses Passwort wird bei jedem Start der App abgefragt",
       "passwordLabel": "Passwort",
       "passwordPlaceholder": "Passwort eingeben",
-      "button": "Anmelden",
-      "forgotPassword": "Passwort vergessen?",
-      "noAccount": "Noch kein Konto?",
-      "createAccount": "Konto erstellen",
+      "confirmLabel": "Passwort bestaetigen",
+      "confirmPlaceholder": "Passwort wiederholen",
       "error": {
-        "fixErrors": "Bitte korrigiere die Fehler",
-        "invalidCredentials": "Ungueltige E-Mail oder Passwort",
-        "unexpected": "Ein unerwarteter Fehler ist aufgetreten",
         "passwordRequired": "Passwort ist erforderlich",
-        "passwordMinLength": "Passwort muss mindestens 8 Zeichen lang sein"
-      },
-      "success": {
-        "welcomeBack": "Willkommen zurueck!"
-      }
-    },
-    "signUp": {
-      "title": "Konto erstellen",
-      "subtitle": "Behalte deine Fristen im Blick",
-      "headerSubtitle": "Dein Behoerdenpost-Assistent",
-      "firstNameLabel": "Vorname",
-      "firstNamePlaceholder": "Max",
-      "lastNameLabel": "Nachname",
-      "lastNamePlaceholder": "Mustermann",
-      "emailLabel": "E-Mail",
-      "emailPlaceholder": "deine@email.de",
-      "passwordLabel": "Passwort",
-      "passwordPlaceholder": "Passwort erstellen",
-      "confirmPasswordLabel": "Passwort bestaetigen",
-      "confirmPasswordPlaceholder": "Passwort wiederholen",
-      "button": "Konto erstellen",
-      "hasAccount": "Bereits ein Konto?",
-      "signIn": "Anmelden",
-      "consent": {
-        "terms": "Ich stimme den ",
-        "termsLink": "Nutzungsbedingungen",
-        "and": " und der ",
-        "privacyLink": "Datenschutzerklaerung",
-        "marketing": "Ich moechte Produktupdates erhalten (optional)"
-      },
-      "passwordRequirements": {
-        "title": "Passwortanforderungen:",
-        "minLength": "Mindestens 8 Zeichen",
-        "uppercase": "Ein Grossbuchstabe",
-        "lowercase": "Ein Kleinbuchstabe",
-        "number": "Eine Zahl",
-        "special": "Ein Sonderzeichen"
-      },
-      "error": {
-        "fixErrors": "Bitte korrigiere die Fehler",
-        "agreeTerms": "Bitte stimme den Bedingungen zu",
-        "emailExists": "Ein Konto mit dieser E-Mail existiert bereits",
-        "defaultError": "Registrierung fehlgeschlagen",
-        "confirmPassword": "Bitte Passwort bestaetigen",
+        "passwordMinLength": "Passwort muss mindestens 4 Zeichen lang sein",
         "passwordsNoMatch": "Passwoerter stimmen nicht ueberein"
-      },
-      "success": {
-        "accountCreated": "Konto erstellt! Pruefe deine E-Mails."
       }
     },
-    "verifyEmail": {
-      "title": "E-Mail verifizieren",
-      "subtitle": "Gib den Code ein, der an {{email}} gesendet wurde",
-      "codeLabel": "Verifizierungscode",
-      "codePlaceholder": "Code eingeben",
-      "button": "Verifizieren",
-      "resend": "Code erneut senden",
-      "resendSuccess": "Code erneut gesendet!",
+    "unlock": {
+      "title": "Willkommen zurueck",
+      "subtitle": "Gib dein Passwort ein, um fortzufahren",
+      "passwordLabel": "Passwort",
+      "passwordPlaceholder": "Passwort eingeben",
+      "button": "Entsperren",
       "error": {
-        "invalid": "Ungueltiger Verifizierungscode",
-        "expired": "Code abgelaufen. Bitte fordere einen neuen an."
-      }
-    },
-    "forgotPassword": {
-      "title": "Passwort vergessen",
-      "subtitle": "Gib deine E-Mail ein, um einen Reset-Code zu erhalten",
-      "emailLabel": "E-Mail",
-      "emailPlaceholder": "deine@email.de",
-      "button": "Reset-Code senden",
-      "backToSignIn": "Zurueck zur Anmeldung",
-      "success": "Falls ein Konto existiert, wurde ein Reset-Code gesendet."
-    },
-    "resetPassword": {
-      "title": "Passwort zuruecksetzen",
-      "subtitle": "Gib dein neues Passwort ein",
-      "passwordLabel": "Neues Passwort",
-      "passwordPlaceholder": "Neues Passwort eingeben",
-      "confirmLabel": "Neues Passwort bestaetigen",
-      "confirmPlaceholder": "Neues Passwort wiederholen",
-      "button": "Passwort zuruecksetzen",
-      "success": "Passwort zurueckgesetzt! Anmeldung laeuft...",
-      "error": {
-        "failed": "Passwort-Reset fehlgeschlagen"
+        "passwordRequired": "Passwort ist erforderlich",
+        "wrongPassword": "Falsches Passwort"
       }
     }
   },
@@ -131,6 +54,9 @@
     "letters": "Briefe",
     "calendar": "Kalender",
     "settings": "Einstellungen"
+  },
+  "settings": {
+    "lockApp": "App sperren"
   },
   "home": {
     "title": "Meine Briefe",

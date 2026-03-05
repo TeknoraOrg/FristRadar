@@ -14,105 +14,28 @@
     "done": "Done"
   },
   "auth": {
-    "signIn": {
-      "title": "Sign In",
-      "subtitle": "Welcome back to FristRadar",
-      "emailLabel": "Email",
-      "emailPlaceholder": "your@email.com",
+    "setupPassword": {
+      "title": "Set Up Password",
+      "subtitle": "This password will be required every time you open the app",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter a password",
+      "confirmLabel": "Confirm Password",
+      "confirmPlaceholder": "Repeat password",
+      "error": {
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 4 characters",
+        "passwordsNoMatch": "Passwords do not match"
+      }
+    },
+    "unlock": {
+      "title": "Welcome Back",
+      "subtitle": "Enter your password to continue",
       "passwordLabel": "Password",
       "passwordPlaceholder": "Enter your password",
-      "button": "Sign In",
-      "forgotPassword": "Forgot password?",
-      "noAccount": "Don't have an account?",
-      "createAccount": "Create account",
+      "button": "Unlock",
       "error": {
-        "fixErrors": "Please fix the errors above",
-        "invalidCredentials": "Invalid email or password",
-        "unexpected": "An unexpected error occurred",
         "passwordRequired": "Password is required",
-        "passwordMinLength": "Password must be at least 8 characters"
-      },
-      "success": {
-        "welcomeBack": "Welcome back!"
-      }
-    },
-    "signUp": {
-      "title": "Create Account",
-      "subtitle": "Start managing your deadlines",
-      "headerSubtitle": "Your government mail assistant",
-      "firstNameLabel": "First Name",
-      "firstNamePlaceholder": "Max",
-      "lastNameLabel": "Last Name",
-      "lastNamePlaceholder": "Mustermann",
-      "emailLabel": "Email",
-      "emailPlaceholder": "your@email.com",
-      "passwordLabel": "Password",
-      "passwordPlaceholder": "Create a password",
-      "confirmPasswordLabel": "Confirm Password",
-      "confirmPasswordPlaceholder": "Repeat password",
-      "button": "Create Account",
-      "hasAccount": "Already have an account?",
-      "signIn": "Sign in",
-      "consent": {
-        "terms": "I agree to the ",
-        "termsLink": "Terms of Service",
-        "and": " and ",
-        "privacyLink": "Privacy Policy",
-        "marketing": "I'd like to receive product updates (optional)"
-      },
-      "passwordRequirements": {
-        "title": "Password requirements:",
-        "minLength": "At least 8 characters",
-        "uppercase": "One uppercase letter",
-        "lowercase": "One lowercase letter",
-        "number": "One number",
-        "special": "One special character"
-      },
-      "error": {
-        "fixErrors": "Please fix the errors above",
-        "agreeTerms": "Please agree to the terms",
-        "emailExists": "An account with this email already exists",
-        "defaultError": "Registration failed",
-        "confirmPassword": "Please confirm your password",
-        "passwordsNoMatch": "Passwords do not match"
-      },
-      "success": {
-        "accountCreated": "Account created! Check your email."
-      }
-    },
-    "verifyEmail": {
-      "title": "Verify Your Email",
-      "subtitle": "Enter the code sent to {{email}}",
-      "codeLabel": "Verification Code",
-      "codePlaceholder": "Enter code",
-      "button": "Verify",
-      "resend": "Resend code",
-      "resendSuccess": "Code resent!",
-      "error": {
-        "invalid": "Invalid verification code",
-        "expired": "Code expired. Please request a new one."
-      }
-    },
-    "forgotPassword": {
-      "title": "Forgot Password",
-      "subtitle": "Enter your email to receive a reset code",
-      "emailLabel": "Email",
-      "emailPlaceholder": "your@email.com",
-      "button": "Send Reset Code",
-      "backToSignIn": "Back to sign in",
-      "success": "If an account exists, a reset code has been sent."
-    },
-    "resetPassword": {
-      "title": "Reset Password",
-      "subtitle": "Enter your new password",
-      "passwordLabel": "New Password",
-      "passwordPlaceholder": "Enter new password",
-      "confirmLabel": "Confirm New Password",
-      "confirmPlaceholder": "Repeat new password",
-      "button": "Reset Password",
-      "success": "Password reset! Signing you in...",
-      "error": {
-        "failed": "Password reset failed"
+        "wrongPassword": "Wrong password"
       }
     }
   },
@@ -131,6 +54,9 @@
     "letters": "Letters",
     "calendar": "Calendar",
     "settings": "Settings"
+  },
+  "settings": {
+    "lockApp": "Lock App"
   },
   "home": {
     "title": "My Letters",

@@ -10,53 +10,37 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuthContext } from '../../src/contexts/AuthContext';
 import { useTheme } from '../../src/contexts/ThemeContext';
-import { validateEmail } from '../../src/utils/validation';
-import { ApiError } from '../../src/lib/api';
 
-export default function SignInScreen() {
+export default function UnlockScreen() {
   const { t } = useTranslation();
-  const { signIn } = useAuthContext();
+  const { unlock } = useAuthContext();
   const { colors } = useTheme();
-  const router = useRouter();
 
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSignIn = async () => {
+  const handleUnlock = async () => {
     setError('');
 
-    const emailError = validateEmail(email);
-    if (emailError) {
-      setError(emailError);
-      return;
-    }
     if (!password) {
-      setError(t('auth.signIn.error.passwordRequired'));
-      return;
-    }
-    if (password.length < 8) {
-      setError(t('auth.signIn.error.passwordMinLength'));
+      setError(t('auth.unlock.error.passwordRequired'));
       return;
     }
 
     setLoading(true);
     try {
-      await signIn(email.trim().toLowerCase(), password);
-    } catch (err) {
-      if (err instanceof ApiError && err.status === 401) {
-        setError(t('auth.signIn.error.invalidCredentials'));
-      } else if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError(t('auth.signIn.error.unexpected'));
+      const success = await unlock(password);
+      if (!success) {
+        setError(t('auth.unlock.error.wrongPassword'));
+        setPassword('');
       }
+    } catch {
+      setError(t('common.error'));
     } finally {
       setLoading(false);
     }
@@ -77,10 +61,10 @@ export default function SignInScreen() {
               {t('brand.name')}
             </Text>
             <Text style={[styles.title, { color: colors.text.primary }]}>
-              {t('auth.signIn.title')}
+              {t('auth.unlock.title')}
             </Text>
             <Text style={[styles.subtitle, { color: colors.text.secondary }]}>
-              {t('auth.signIn.subtitle')}
+              {t('auth.unlock.subtitle')}
             </Text>
           </View>
 
@@ -92,7 +76,7 @@ export default function SignInScreen() {
 
           <View style={styles.form}>
             <Text style={[styles.label, { color: colors.text.primary }]}>
-              {t('auth.signIn.emailLabel')}
+              {t('auth.unlock.passwordLabel')}
             </Text>
             <TextInput
               style={[styles.input, {
@@ -100,47 +84,19 @@ export default function SignInScreen() {
                 borderColor: colors.border.default,
                 color: colors.text.primary,
               }]}
-              placeholder={t('auth.signIn.emailPlaceholder')}
-              placeholderTextColor={colors.text.muted}
-              value={email}
-              onChangeText={setEmail}
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="email-address"
-              textContentType="emailAddress"
-              editable={!loading}
-            />
-
-            <Text style={[styles.label, { color: colors.text.primary }]}>
-              {t('auth.signIn.passwordLabel')}
-            </Text>
-            <TextInput
-              style={[styles.input, {
-                backgroundColor: colors.background.card,
-                borderColor: colors.border.default,
-                color: colors.text.primary,
-              }]}
-              placeholder={t('auth.signIn.passwordPlaceholder')}
+              placeholder={t('auth.unlock.passwordPlaceholder')}
               placeholderTextColor={colors.text.muted}
               value={password}
               onChangeText={setPassword}
               secureTextEntry
-              textContentType="password"
               editable={!loading}
+              onSubmitEditing={handleUnlock}
+              returnKeyType="done"
             />
 
             <TouchableOpacity
-              onPress={() => router.push('/(auth)/forgot-password')}
-              disabled={loading}
-            >
-              <Text style={[styles.forgotPassword, { color: colors.primary.default }]}>
-                {t('auth.signIn.forgotPassword')}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
               style={[styles.button, { backgroundColor: colors.primary.default }]}
-              onPress={handleSignIn}
+              onPress={handleUnlock}
               disabled={loading}
               activeOpacity={0.8}
             >
@@ -148,20 +104,9 @@ export default function SignInScreen() {
                 <ActivityIndicator color={colors.primary.foreground} />
               ) : (
                 <Text style={[styles.buttonText, { color: colors.primary.foreground }]}>
-                  {t('auth.signIn.button')}
+                  {t('auth.unlock.button')}
                 </Text>
               )}
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.footer}>
-            <Text style={[styles.footerText, { color: colors.text.secondary }]}>
-              {t('auth.signIn.noAccount')}{' '}
-            </Text>
-            <TouchableOpacity onPress={() => router.push('/(auth)/sign-up')} disabled={loading}>
-              <Text style={[styles.footerLink, { color: colors.primary.default }]}>
-                {t('auth.signIn.createAccount')}
-              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -177,7 +122,7 @@ const styles = StyleSheet.create({
   header: { marginBottom: 32, alignItems: 'center' },
   brand: { fontSize: 32, fontWeight: '700', marginBottom: 8 },
   title: { fontSize: 22, fontWeight: '600', marginBottom: 4 },
-  subtitle: { fontSize: 15 },
+  subtitle: { fontSize: 15, textAlign: 'center' },
   errorBox: { padding: 12, borderRadius: 8, marginBottom: 16 },
   errorText: { fontSize: 14, textAlign: 'center' },
   form: { marginBottom: 24 },
@@ -189,15 +134,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     fontSize: 16,
   },
-  forgotPassword: { fontSize: 14, textAlign: 'right', marginTop: 8, marginBottom: 20 },
   button: {
     height: 50,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 24,
   },
   buttonText: { fontSize: 17, fontWeight: '600' },
-  footer: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center' },
-  footerText: { fontSize: 15 },
-  footerLink: { fontSize: 15, fontWeight: '600' },
 });

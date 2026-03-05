@@ -8,15 +8,13 @@ import { useTheme } from '../../src/contexts/ThemeContext';
 export default function WelcomeScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const { updateProfile } = useAuthContext();
+  const { completeOnboarding } = useAuthContext();
   const [loading, setLoading] = useState(false);
 
   const handleGetStarted = async () => {
     setLoading(true);
     try {
-      await updateProfile({ onboarding_completed: true });
-    } catch {
-      // Even if the server call fails, the auth guard will re-evaluate
+      await completeOnboarding();
     } finally {
       setLoading(false);
     }
@@ -38,14 +36,8 @@ export default function WelcomeScreen() {
         </View>
 
         <View style={styles.features}>
-          <FeatureItem
-            label={t('tabs.letters')}
-            colors={colors}
-          />
-          <FeatureItem
-            label={t('tabs.calendar')}
-            colors={colors}
-          />
+          <FeatureItem label={t('tabs.letters')} colors={colors} />
+          <FeatureItem label={t('tabs.calendar')} colors={colors} />
         </View>
 
         <TouchableOpacity

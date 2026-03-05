@@ -1,8 +1,25 @@
 node_modules/
 dist/
+*.tsbuildinfo
+
+# Cloudflare
+.wrangler/
+.dev.vars
+
+# Expo
+.expo/
+ios/
+android/
+web-build/
+
+# Environment
 .env
 .env.local
-.DS_Store
-*.log
+
+# IDE
 .vscode/
 .idea/
+
+# OS
+.DS_Store
+*.log

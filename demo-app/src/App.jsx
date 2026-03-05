@@ -66,7 +66,6 @@ const DEMO_LETTERS = [
     frist_iso: "2026-03-19",
     tage_verbleibend: 15,
     risiko: "hoch",
-    erinnerungen: ["2026-03-12", "2026-03-16", "2026-03-18"],
     zusammenfassung: "Das Finanzamt fordert Sie auf, Ihre Einkommensteuererklärung für das Jahr 2024 einzureichen. Bei Nichtabgabe droht ein Verspätungszuschlag.",
     konsequenz: "Verspätungszuschlag ab 0,25 % der festgesetzten Steuer pro Monat, mindestens 25 € pro Monat. Zusätzlich kann ein Zwangsgeld festgesetzt werden.",
     todos: [
@@ -116,7 +115,6 @@ Anlagen:
     frist_iso: "2026-03-26",
     tage_verbleibend: 22,
     risiko: "mittel",
-    erinnerungen: ["2026-03-19", "2026-03-23", "2026-03-25"],
     zusammenfassung: "Ihnen wird eine Geschwindigkeitsüberschreitung von 23 km/h innerorts vorgeworfen. Sie haben die Möglichkeit, sich innerhalb der Frist zu äußern.",
     konsequenz: "Ohne Stellungnahme ergeht der Bußgeldbescheid in der Regel ohne Berücksichtigung Ihrer Sicht. Bußgeld: voraussichtlich 115 € + 1 Punkt in Flensburg.",
     todos: [
@@ -162,7 +160,6 @@ Max Mustermann`,
     frist_iso: "2026-04-10",
     tage_verbleibend: 37,
     risiko: "niedrig",
-    erinnerungen: ["2026-04-03", "2026-04-07", "2026-04-09"],
     zusammenfassung: "Das Jobcenter fordert Sie auf, den Weiterbewilligungsantrag für Bürgergeld einzureichen, inkl. aktueller Einkommensnachweise.",
     konsequenz: "Bei Fristversäumnis droht eine Leistungskürzung oder vorläufige Einstellung der Zahlungen.",
     todos: [
@@ -188,7 +185,6 @@ const BACKLOG_LETTERS = [
     frist_iso: "2026-03-15",
     tage_verbleibend: 11,
     risiko: "hoch",
-    erinnerungen: ["2026-03-08", "2026-03-12", "2026-03-14"],
     zusammenfassung: "Ihnen wurde ein Mahnbescheid über 1.240 € zugestellt. Sie können innerhalb von zwei Wochen Widerspruch einlegen.",
     konsequenz: "Ohne Widerspruch wird der Mahnbescheid rechtskräftig. Der Gläubiger kann dann einen Vollstreckungsbescheid beantragen.",
     todos: [
@@ -209,7 +205,6 @@ const BACKLOG_LETTERS = [
     frist_iso: "2026-03-25",
     tage_verbleibend: 21,
     risiko: "mittel",
-    erinnerungen: ["2026-03-18", "2026-03-22", "2026-03-24"],
     zusammenfassung: "Der Beitragsservice fordert rückständige Rundfunkbeiträge in Höhe von 220,50 € zzgl. Säumniszuschlag.",
     konsequenz: "Bei Nichtzahlung wird der Bescheid vollstreckbar. Pfandung oder Gerichtsvollzieher möglich.",
     todos: [
@@ -230,7 +225,6 @@ const BACKLOG_LETTERS = [
     frist_iso: "2026-03-31",
     tage_verbleibend: 27,
     risiko: "mittel",
-    erinnerungen: ["2026-03-24", "2026-03-28", "2026-03-30"],
     zusammenfassung: "Ihre Hauptuntersuchung (TÜV) ist seit 2 Monaten überfällig. Legen Sie die HU-Bescheinigung vor, andernfalls droht Stilllegung.",
     konsequenz: "Zwangsstilllegung des Fahrzeugs, Bußgeld bis 60 €, Eintrag in Flensburg.",
     todos: [
@@ -251,7 +245,6 @@ const BACKLOG_LETTERS = [
     frist_iso: "2026-04-17",
     tage_verbleibend: 44,
     risiko: "hoch",
-    erinnerungen: ["2026-04-10", "2026-04-14", "2026-04-16"],
     zusammenfassung: "Sie werden aufgefordert, Unterlagen zur Verlängerung Ihrer Aufenthaltserlaubnis einzureichen (Arbeitsvertrag, Mietvertrag, Krankenversicherungsnachweis).",
     konsequenz: "Ohne rechtzeitige Verlängerung kann eine Duldung oder Ausreisepflicht eintreten.",
     todos: [
@@ -273,7 +266,6 @@ const BACKLOG_LETTERS = [
     frist_iso: "2026-04-10",
     tage_verbleibend: 37,
     risiko: "hoch",
-    erinnerungen: ["2026-04-03", "2026-04-07", "2026-04-09"],
     zusammenfassung: "Die Umsatzsteuer-Voranmeldung für Q4/2025 wurde noch nicht eingereicht. Bei weiterem Versäumnis wird ein Verspätungszuschlag festgesetzt.",
     konsequenz: "Verspätungszuschlag bis zu 10 % der angemeldeten Steuer. Zwangsgeld bis 25.000 € möglich.",
     todos: [
@@ -294,7 +286,6 @@ const BACKLOG_LETTERS = [
     frist_iso: "2026-03-20",
     tage_verbleibend: 16,
     risiko: "niedrig",
-    erinnerungen: ["2026-03-13", "2026-03-17", "2026-03-19"],
     zusammenfassung: "Gegen Sie liegt eine Beschwerde wegen Ruhestörung vor. Sie haben Gelegenheit zur Stellungnahme.",
     konsequenz: "Bei wiederholten Verstößen Bußgeld bis 5.000 €. Erste Verwarnung bleibt ohne Bußgeld bei Stellungnahme.",
     todos: [
@@ -315,7 +306,6 @@ const BACKLOG_LETTERS = [
     frist_iso: "2026-03-18",
     tage_verbleibend: 14,
     risiko: "hoch",
-    erinnerungen: ["2026-03-11", "2026-03-15", "2026-03-17"],
     zusammenfassung: "Rückständige Krankenversicherungsbeiträge in Höhe von 847,20 €. Zahlungsfrist bereits einmal verlängert.",
     konsequenz: "Säumniszuschlag 1 % pro Monat. Leistungseinschränkung auf Notfallversorgung bei weiterem Verzug.",
     todos: [
@@ -336,7 +326,6 @@ const BACKLOG_LETTERS = [
     frist_iso: "2026-04-26",
     tage_verbleibend: 53,
     risiko: "niedrig",
-    erinnerungen: ["2026-04-19", "2026-04-23", "2026-04-25"],
     zusammenfassung: "Das Bauamt stellt fest, dass ein Carport ohne Baugenehmigung errichtet wurde. Sie werden zum Rückbau oder zur nachträglichen Genehmigung aufgefordert.",
     konsequenz: "Zwangsgeld bis 10.000 € bei Nichtbefolgung. Ersatzvornahme (Rückbau auf Ihre Kosten) möglich.",
     todos: [
@@ -467,7 +456,7 @@ function HomeScreen({ onScan, onSelectLetter, letters }) {
   );
 }
 
-function CalendarScreen({ letters, onSelectLetter }) {
+function CalendarScreen({ letters, reminders, onSelectLetter }) {
   const [viewDate, setViewDate] = useState(() => {
     const now = new Date();
     return { year: now.getFullYear(), month: now.getMonth() };
@@ -492,10 +481,17 @@ function CalendarScreen({ letters, onSelectLetter }) {
       if (!deadlineMap[d]) deadlineMap[d] = [];
       deadlineMap[d].push(l);
     }
-    if (l.erinnerungen) {
-      l.erinnerungen.forEach(r => {
-        if (!reminderMap[r]) reminderMap[r] = [];
-        reminderMap[r].push(l);
+    if (l.frist_iso && reminders?.[l.id]) {
+      const lr = reminders[l.id];
+      const frist = new Date(l.frist_iso + "T00:00:00");
+      [{ key: "t7", days: 7 }, { key: "t3", days: 3 }, { key: "t1", days: 1 }].forEach(({ key, days }) => {
+        if (lr[key]) {
+          const rd = new Date(frist);
+          rd.setDate(rd.getDate() - days);
+          const rStr = `${rd.getFullYear()}-${String(rd.getMonth() + 1).padStart(2, "0")}-${String(rd.getDate()).padStart(2, "0")}`;
+          if (!reminderMap[rStr]) reminderMap[rStr] = [];
+          reminderMap[rStr].push(l);
+        }
       });
     }
   });
@@ -543,17 +539,17 @@ function CalendarScreen({ letters, onSelectLetter }) {
               const dateStr = `${viewDate.year}-${String(viewDate.month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
               const isToday = dateStr === todayStr;
               const deadlines = deadlineMap[dateStr] || [];
-              const reminders = reminderMap[dateStr] || [];
-              const hasDot = deadlines.length > 0 || reminders.length > 0;
-              const dotColor = deadlines.length > 0
-                ? RISK_MAP[deadlines[0].risiko]?.color || "#999"
-                : reminders.length > 0 ? "#6B7280" : null;
+              const dayReminders = reminderMap[dateStr] || [];
+              const hasDeadline = deadlines.length > 0;
+              const hasReminder = dayReminders.length > 0;
+              const hasDot = hasDeadline || hasReminder;
 
               return (
                 <div key={day} style={{
                   position: "relative", padding: "6px 0", cursor: hasDot ? "pointer" : "default",
                 }} onClick={() => {
-                  if (deadlines.length > 0) onSelectLetter(deadlines[0]);
+                  if (hasDeadline) onSelectLetter(deadlines[0]);
+                  else if (hasReminder) onSelectLetter(dayReminders[0]);
                 }}>
                   <div style={{
                     width: 32, height: 32, margin: "0 auto", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
@@ -563,10 +559,14 @@ function CalendarScreen({ letters, onSelectLetter }) {
                     {day}
                   </div>
                   {hasDot && (
-                    <div style={{
-                      width: 6, height: 6, borderRadius: "50%", background: dotColor,
-                      margin: "2px auto 0",
-                    }} />
+                    <div style={{ display: "flex", gap: 3, justifyContent: "center", marginTop: 2 }}>
+                      {hasDeadline && (
+                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: RISK_MAP[deadlines[0].risiko]?.color || "#999" }} />
+                      )}
+                      {hasReminder && (
+                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#3B82F6" }} />
+                      )}
+                    </div>
                   )}
                 </div>
               );
@@ -575,13 +575,17 @@ function CalendarScreen({ letters, onSelectLetter }) {
         </div>
 
         {/* Legend */}
-        <div style={{ display: "flex", gap: 14, padding: "12px 20px", justifyContent: "center" }}>
+        <div style={{ display: "flex", gap: 14, padding: "12px 20px", justifyContent: "center", flexWrap: "wrap" }}>
           {[["hoch", "Hohes R."], ["mittel", "Mittleres R."], ["niedrig", "Geringes R."]].map(([key, label]) => (
             <div key={key} style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: "#666" }}>
               <div style={{ width: 6, height: 6, borderRadius: "50%", background: RISK_MAP[key].color }} />
               {label}
             </div>
           ))}
+          <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: "#666" }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#3B82F6" }} />
+            Erinnerung
+          </div>
         </div>
 
         {/* Upcoming deadlines list */}
@@ -899,7 +903,7 @@ function AnalyzingScreen({ onDone }) {
   );
 }
 
-function DetailScreen({ letter, onBack, onGoToCalendar }) {
+function DetailScreen({ letter, onBack, onGoToCalendar, reminders, onToggleReminder }) {
   const [tab, setTab] = useState("uebersicht");
   const [todos, setTodos] = useState(letter.todos);
   const [sent, setSent] = useState(false);
@@ -967,10 +971,58 @@ function DetailScreen({ letter, onBack, onGoToCalendar }) {
               </div>
             </div>
 
+            {/* Erinnerungen panel */}
+            {(() => {
+              const lr = reminders?.[letter.id] || { t7: true, t3: true, t1: true };
+              const frist = new Date(letter.frist_iso + "T00:00:00");
+              const fmt = (d) => `${String(d.getDate()).padStart(2, "0")}.${String(d.getMonth() + 1).padStart(2, "0")}.${d.getFullYear()}`;
+              const sub = (days) => { const d = new Date(frist); d.setDate(d.getDate() - days); return d; };
+              const rows = [
+                { key: "t7", label: "7 Tage vorher", date: sub(7) },
+                { key: "t3", label: "3 Tage vorher", date: sub(3) },
+                { key: "t1", label: "1 Tag vorher", date: sub(1) },
+              ];
+              return (
+                <div style={{ background: "#fff", border: "1px solid #E5E5E5", borderRadius: 10, padding: 16, marginBottom: 14 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
+                    <span style={{ fontSize: 16 }}>{"\uD83D\uDD14"}</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: "#1A1A1A", textTransform: "uppercase", letterSpacing: "0.8px" }}>Erinnerungen</span>
+                  </div>
+                  {rows.map(r => (
+                    <div key={r.key} style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      padding: "10px 0", borderTop: "1px solid #F0F0F0",
+                    }}>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 500, color: "#1A1A1A" }}>{r.label}</div>
+                        <div style={{ fontSize: 12, color: "#888", marginTop: 2 }}>{fmt(r.date)}</div>
+                      </div>
+                      <button
+                        onClick={() => onToggleReminder(letter.id, r.key)}
+                        style={{
+                          width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
+                          background: lr[r.key] ? "#1A1A1A" : "#D1D5DB", position: "relative", transition: "background 0.2s",
+                          padding: 0, flexShrink: 0,
+                        }}
+                      >
+                        <div style={{
+                          width: 18, height: 18, borderRadius: "50%", background: "#fff",
+                          position: "absolute", top: 3,
+                          left: lr[r.key] ? 23 : 3,
+                          transition: "left 0.2s",
+                          boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+                        }} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+
             <button onClick={onGoToCalendar} style={{
               width: "100%", padding: 14, background: "#1A1A1A", color: "#fff", border: "none", borderRadius: 8,
               fontSize: 14, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            }}>{"\uD83D\uDCC5"} Erinnerungen im Kalender setzen</button>
+            }}>{"\uD83D\uDCC5"} Im Kalender anzeigen</button>
           </div>
         )}
 
@@ -1091,6 +1143,20 @@ export default function App() {
   const [selectedLetter, setSelectedLetter] = useState(null);
   const [backlogIndex, setBacklogIndex] = useState(0);
   const [scannedLetters, setScannedLetters] = useState([]);
+  const [reminders, setReminders] = useState(() => {
+    const init = {};
+    [...DEMO_LETTERS, ...BACKLOG_LETTERS].forEach(l => {
+      init[l.id] = { t7: true, t3: true, t1: true };
+    });
+    return init;
+  });
+
+  const toggleReminder = (letterId, type) => {
+    setReminders(prev => ({
+      ...prev,
+      [letterId]: { ...prev[letterId], [type]: !prev[letterId]?.[type] },
+    }));
+  };
 
   // All visible letters = initial DEMO_LETTERS + scanned ones
   const allLetters = [...DEMO_LETTERS, ...scannedLetters];
@@ -1151,6 +1217,7 @@ export default function App() {
       {screen === "calendar" && (
         <CalendarScreen
           letters={allLetters}
+          reminders={reminders}
           onSelectLetter={handleSelectLetter}
         />
       )}
@@ -1167,7 +1234,7 @@ export default function App() {
         <AnalyzingScreen onDone={handleAnalyzed} />
       )}
       {screen === "detail" && selectedLetter && (
-        <DetailScreen letter={selectedLetter} onBack={handleBack} onGoToCalendar={handleGoToCalendar} />
+        <DetailScreen letter={selectedLetter} onBack={handleBack} onGoToCalendar={handleGoToCalendar} reminders={reminders} onToggleReminder={toggleReminder} />
       )}
       {showBottomNav && (
         <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />

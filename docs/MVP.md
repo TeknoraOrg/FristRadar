@@ -59,6 +59,7 @@ Competitors summarize. FristRadar delivers **action-ready artifacts**:
 - 1-sentence "What is being requested?"
 - 3-step to-do plan
 - Export: calendar (.ics) + one generic response template
+- **Reminders**: Each deadline gets 3 configurable reminders (T-7, T-3, T-1). User can toggle each on/off per letter. Active reminders appear as dots in the calendar and trigger push notifications (mobile).
 
 ### Technical Approach (quick & clean)
 - On-device OCR (or server-side)

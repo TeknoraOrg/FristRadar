@@ -1,0 +1,23 @@
+{
+  "name": "fristradar-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-01-01",
+  "placement": {
+    "mode": "smart"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "fristradar-db",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    "JWT_ISSUER": "fristradar",
+    "OTP_EXPIRY_SECONDS": "300",
+    "OTP_RATE_LIMIT_MAX": "5",
+    "OTP_RATE_LIMIT_WINDOW_SECONDS": "900",
+    "ENVIRONMENT": "development"
+  }
+}

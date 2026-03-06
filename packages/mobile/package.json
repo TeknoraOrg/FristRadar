@@ -1,0 +1,6 @@
+{
+  "name": "@fristradar/mobile",
+  "private": true,
+  "version": "0.0.1",
+  "description": "FristRadar mobile app (Expo + React Native) — to be scaffolded"
+}

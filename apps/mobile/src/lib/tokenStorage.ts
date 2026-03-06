@@ -2,6 +2,7 @@ import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
 const KEYS = {
+  AUTH_TOKEN: 'fristradar_auth_token',
   PASSWORD_HASH: 'fristradar_password_hash',
   ONBOARDING_COMPLETED: 'fristradar_onboarding_completed',
 } as const;
@@ -37,6 +38,27 @@ async function removeItem(key: string): Promise<void> {
   await SecureStore.deleteItemAsync(key);
 }
 
+// ─── Auth Token ──────────────────────────────────────────────────────────────
+
+export async function saveAuthToken(token: string): Promise<void> {
+  await setItem(KEYS.AUTH_TOKEN, token);
+}
+
+export async function getAuthToken(): Promise<string | null> {
+  return getItem(KEYS.AUTH_TOKEN);
+}
+
+export async function removeAuthToken(): Promise<void> {
+  await removeItem(KEYS.AUTH_TOKEN);
+}
+
+export async function hasAuthToken(): Promise<boolean> {
+  const token = await getAuthToken();
+  return token !== null;
+}
+
+// ─── Local Password ──────────────────────────────────────────────────────────
+
 export async function savePasswordHash(hash: string): Promise<void> {
   await setItem(KEYS.PASSWORD_HASH, hash);
 }
@@ -49,6 +71,8 @@ export async function hasPassword(): Promise<boolean> {
   const hash = await getPasswordHash();
   return hash !== null;
 }
+
+// ─── Onboarding ──────────────────────────────────────────────────────────────
 
 export async function setOnboardingCompleted(value: boolean): Promise<void> {
   if (value) {

@@ -14,16 +14,42 @@
     "done": "Done"
   },
   "auth": {
+    "phoneEntry": {
+      "title": "Create Account",
+      "subtitle": "Enter your phone number to get started",
+      "phoneLabel": "Phone Number",
+      "phonePlaceholder": "Phone number",
+      "sendOtp": "Send Verification Code",
+      "selectCountry": "Select Country",
+      "error": {
+        "phoneRequired": "Phone number is required"
+      }
+    },
+    "verifyOtp": {
+      "title": "Verify Phone",
+      "subtitle": "Enter the 6-digit code sent to {{phone}}",
+      "verify": "Verify",
+      "resend": "Resend Code",
+      "resendIn": "Resend in {{seconds}}s",
+      "error": {
+        "incomplete": "Please enter the complete 6-digit code"
+      }
+    },
     "setupPassword": {
-      "title": "Set Up Password",
-      "subtitle": "This password will be required every time you open the app",
+      "title": "Set Your Password",
+      "subtitle": "Choose a strong password for your account",
       "passwordLabel": "Password",
       "passwordPlaceholder": "Enter a password",
       "confirmLabel": "Confirm Password",
       "confirmPlaceholder": "Repeat password",
+      "createAccount": "Create Account",
+      "rule": {
+        "minLength": "At least 8 characters",
+        "uppercase": "At least 1 uppercase letter",
+        "number": "At least 1 number"
+      },
       "error": {
         "passwordRequired": "Password is required",
-        "passwordMinLength": "Password must be at least 4 characters",
         "passwordsNoMatch": "Passwords do not match"
       }
     },

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import * as Crypto from 'expo-crypto';
 import * as store from '../lib/tokenStorage';
 
-export type AuthStatus = 'loading' | 'setup-password' | 'locked' | 'unlocked';
+export type AuthStatus = 'loading' | 'needs-registration' | 'locked' | 'unlocked';
 
 interface AuthState {
   status: AuthStatus;
@@ -32,24 +32,30 @@ export function useAuth() {
   useEffect(() => {
     (async () => {
       try {
-        const [hasPass, onboarded] = await Promise.all([
+        const [hasToken, hasPass, onboarded] = await Promise.all([
+          store.hasAuthToken(),
           store.hasPassword(),
           store.getOnboardingCompleted(),
         ]);
-        if (!hasPass) {
-          setIfMounted(() => ({ status: 'setup-password', onboardingCompleted: false }));
+        if (!hasToken || !hasPass) {
+          // No account yet — start registration
+          setIfMounted(() => ({ status: 'needs-registration', onboardingCompleted: false }));
         } else {
+          // Has account — show unlock screen
           setIfMounted(() => ({ status: 'locked', onboardingCompleted: onboarded }));
         }
       } catch {
-        setIfMounted(() => ({ status: 'setup-password', onboardingCompleted: false }));
+        setIfMounted(() => ({ status: 'needs-registration', onboardingCompleted: false }));
       }
     })();
   }, [setIfMounted]);
 
-  const setupPassword = useCallback(async (password: string) => {
+  const completeRegistration = useCallback(async (authToken: string, password: string) => {
     const hash = await hashPassword(password);
-    await store.savePasswordHash(hash);
+    await Promise.all([
+      store.saveAuthToken(authToken),
+      store.savePasswordHash(hash),
+    ]);
     setIfMounted(() => ({ status: 'unlocked', onboardingCompleted: false }));
   }, [setIfMounted]);
 
@@ -76,7 +82,7 @@ export function useAuth() {
   return {
     status: state.status,
     onboardingCompleted: state.onboardingCompleted,
-    setupPassword,
+    completeRegistration,
     unlock,
     lock,
     completeOnboarding,

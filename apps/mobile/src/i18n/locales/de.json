@@ -14,16 +14,42 @@
     "done": "Fertig"
   },
   "auth": {
+    "phoneEntry": {
+      "title": "Konto erstellen",
+      "subtitle": "Gib deine Telefonnummer ein, um loszulegen",
+      "phoneLabel": "Telefonnummer",
+      "phonePlaceholder": "Telefonnummer",
+      "sendOtp": "Bestaetigungscode senden",
+      "selectCountry": "Land auswaehlen",
+      "error": {
+        "phoneRequired": "Telefonnummer ist erforderlich"
+      }
+    },
+    "verifyOtp": {
+      "title": "Telefon verifizieren",
+      "subtitle": "Gib den 6-stelligen Code ein, der an {{phone}} gesendet wurde",
+      "verify": "Verifizieren",
+      "resend": "Code erneut senden",
+      "resendIn": "Erneut senden in {{seconds}}s",
+      "error": {
+        "incomplete": "Bitte gib den vollstaendigen 6-stelligen Code ein"
+      }
+    },
     "setupPassword": {
-      "title": "Passwort einrichten",
-      "subtitle": "Dieses Passwort wird bei jedem Start der App abgefragt",
+      "title": "Passwort festlegen",
+      "subtitle": "Waehle ein sicheres Passwort fuer dein Konto",
       "passwordLabel": "Passwort",
       "passwordPlaceholder": "Passwort eingeben",
       "confirmLabel": "Passwort bestaetigen",
       "confirmPlaceholder": "Passwort wiederholen",
+      "createAccount": "Konto erstellen",
+      "rule": {
+        "minLength": "Mindestens 8 Zeichen",
+        "uppercase": "Mindestens 1 Grossbuchstabe",
+        "number": "Mindestens 1 Zahl"
+      },
       "error": {
         "passwordRequired": "Passwort ist erforderlich",
-        "passwordMinLength": "Passwort muss mindestens 4 Zeichen lang sein",
         "passwordsNoMatch": "Passwoerter stimmen nicht ueberein"
       }
     },

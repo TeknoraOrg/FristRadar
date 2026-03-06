@@ -11,19 +11,29 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuthContext } from '../../src/contexts/AuthContext';
 import { useTheme } from '../../src/contexts/ThemeContext';
+import { register, ApiError } from '../../src/lib/api';
+import { validatePassword } from '../../src/lib/validation';
 
 export default function SetupPasswordScreen() {
   const { t } = useTranslation();
-  const { setupPassword } = useAuthContext();
+  const { completeRegistration } = useAuthContext();
   const { colors } = useTheme();
+  const { phone, countryCode, verificationToken } = useLocalSearchParams<{
+    phone: string;
+    countryCode: string;
+    verificationToken: string;
+  }>();
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const validation = validatePassword(password);
 
   const handleSetup = async () => {
     setError('');
@@ -32,8 +42,8 @@ export default function SetupPasswordScreen() {
       setError(t('auth.setupPassword.error.passwordRequired'));
       return;
     }
-    if (password.length < 4) {
-      setError(t('auth.setupPassword.error.passwordMinLength'));
+    if (!validation.valid) {
+      setError(validation.errors[0]);
       return;
     }
     if (password !== confirmPassword) {
@@ -43,13 +53,29 @@ export default function SetupPasswordScreen() {
 
     setLoading(true);
     try {
-      await setupPassword(password);
-    } catch {
-      setError(t('common.error'));
+      const res = await register(phone!, password, verificationToken!, countryCode);
+      await completeRegistration(res.data.token, password);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(err.message);
+      } else {
+        setError(t('common.error'));
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  const CheckItem = ({ met, label }: { met: boolean; label: string }) => (
+    <View style={styles.checkRow}>
+      <Text style={[styles.checkIcon, { color: met ? colors.status.success : colors.text.muted }]}>
+        {met ? '\u2713' : '\u2022'}
+      </Text>
+      <Text style={[styles.checkLabel, { color: met ? colors.text.primary : colors.text.muted }]}>
+        {label}
+      </Text>
+    </View>
+  );
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background.primary }]}>
@@ -97,6 +123,14 @@ export default function SetupPasswordScreen() {
               editable={!loading}
             />
 
+            {password.length > 0 && (
+              <View style={styles.checks}>
+                <CheckItem met={validation.checks.minLength} label={t('auth.setupPassword.rule.minLength')} />
+                <CheckItem met={validation.checks.hasUppercase} label={t('auth.setupPassword.rule.uppercase')} />
+                <CheckItem met={validation.checks.hasNumber} label={t('auth.setupPassword.rule.number')} />
+              </View>
+            )}
+
             <Text style={[styles.label, { color: colors.text.primary }]}>
               {t('auth.setupPassword.confirmLabel')}
             </Text>
@@ -115,7 +149,11 @@ export default function SetupPasswordScreen() {
             />
 
             <TouchableOpacity
-              style={[styles.button, { backgroundColor: colors.primary.default }]}
+              style={[styles.button, {
+                backgroundColor: validation.valid && password === confirmPassword && confirmPassword
+                  ? colors.primary.default
+                  : colors.primary.default + '60',
+              }]}
               onPress={handleSetup}
               disabled={loading}
               activeOpacity={0.8}
@@ -124,7 +162,7 @@ export default function SetupPasswordScreen() {
                 <ActivityIndicator color={colors.primary.foreground} />
               ) : (
                 <Text style={[styles.buttonText, { color: colors.primary.foreground }]}>
-                  {t('common.continue')}
+                  {t('auth.setupPassword.createAccount')}
                 </Text>
               )}
             </TouchableOpacity>
@@ -154,6 +192,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     fontSize: 16,
   },
+  checks: { marginTop: 8, marginBottom: 4, gap: 4 },
+  checkRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  checkIcon: { fontSize: 14, fontWeight: '700', width: 16, textAlign: 'center' },
+  checkLabel: { fontSize: 13 },
   button: {
     height: 50,
     borderRadius: 10,

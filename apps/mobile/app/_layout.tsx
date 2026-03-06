@@ -29,9 +29,9 @@ function AuthGuard() {
     const inAuthGroup = segments[0] === '(auth)';
     const inOnboardingGroup = segments[0] === '(onboarding)';
 
-    if (status === 'setup-password') {
+    if (status === 'needs-registration') {
       if (!inAuthGroup) {
-        router.replace('/(auth)/setup-password');
+        router.replace('/(auth)/phone-entry');
       }
     } else if (status === 'locked') {
       if (!inAuthGroup) {

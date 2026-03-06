@@ -4,7 +4,7 @@ import { useAuth, type AuthStatus } from '../hooks/useAuth';
 interface AuthContextType {
   status: AuthStatus;
   onboardingCompleted: boolean;
-  setupPassword: (password: string) => Promise<void>;
+  completeRegistration: (authToken: string, password: string) => Promise<void>;
   unlock: (password: string) => Promise<boolean>;
   lock: () => void;
   completeOnboarding: () => Promise<void>;

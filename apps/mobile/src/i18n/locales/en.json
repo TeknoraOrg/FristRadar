@@ -1,0 +1,72 @@
+{
+  "brand": {
+    "name": "FristRadar",
+    "tagline": "Government mail under control."
+  },
+  "common": {
+    "error": "Something went wrong",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "required": "(required)",
+    "back": "Back",
+    "continue": "Continue",
+    "done": "Done"
+  },
+  "auth": {
+    "setupPassword": {
+      "title": "Set Up Password",
+      "subtitle": "This password will be required every time you open the app",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter a password",
+      "confirmLabel": "Confirm Password",
+      "confirmPlaceholder": "Repeat password",
+      "error": {
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 4 characters",
+        "passwordsNoMatch": "Passwords do not match"
+      }
+    },
+    "unlock": {
+      "title": "Welcome Back",
+      "subtitle": "Enter your password to continue",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "button": "Unlock",
+      "error": {
+        "passwordRequired": "Password is required",
+        "wrongPassword": "Wrong password"
+      }
+    }
+  },
+  "onboarding": {
+    "language": {
+      "title": "Choose Language",
+      "subtitle": "You can change this later in settings"
+    },
+    "welcome": {
+      "title": "Welcome to FristRadar",
+      "subtitle": "Your government mail assistant",
+      "getStarted": "Get Started"
+    }
+  },
+  "tabs": {
+    "letters": "Letters",
+    "calendar": "Calendar",
+    "settings": "Settings"
+  },
+  "settings": {
+    "lockApp": "Lock App"
+  },
+  "home": {
+    "title": "My Letters",
+    "empty": "No letters scanned yet",
+    "scan": "Scan Letter"
+  },
+  "api": {
+    "errors": {
+      "serverError": "Server error ({{status}})",
+      "network": "Network error. Please check your connection."
+    }
+  }
+}

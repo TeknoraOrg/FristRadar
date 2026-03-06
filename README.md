@@ -70,7 +70,7 @@ Receipt photos, send date, recipient address, tracking ID -- all in one place pe
 | **LLM (platform)** | Cloudflare Workers AI | On-platform inference for lightweight tasks: classification, embeddings, summaries |
 | **Backend** | Hono.js on Cloudflare Workers (EU) | API server: receives scans, orchestrates LLM calls, Cron Triggers for deadline reminders (T-7/T-3/T-1), sends push notifications |
 | **Database** | Cloudflare D1 (SQLite) via Drizzle ORM | Stores extracted letter data, deadlines, user preferences; edge-native, type-safe queries |
-| **Auth** | Custom JWT (jose) + OTP (email/SMS) | Passwordless login via email/SMS OTP, JWT sessions, social login (Google, Apple) via OAuth2 PKCE |
+| **Auth** | Custom JWT (jose) + password + SMS OTP | Phone number + user-defined password login, JWT sessions; OTP for registration/password reset; social login (Google, Apple) planned for later |
 | **Storage** | Cloudflare R2 (EU bucket) | Encrypted storage for proof-of-delivery photos (posting receipts, tracking screenshots), original scan images (opt-in) |
 | **Calendar** | expo-calendar + ics package | "Erinnerungen im Kalender setzen" button: writes deadline + T-7/T-3/T-1 reminders to native iOS/Android calendar; .ics export for web users |
 | **PDF Generation** | Typst (server-side) | "Antwort" tab: generates ready-to-print response letters in DIN 5008 format with auto-filled sender, reference number, fold marks |
@@ -161,7 +161,7 @@ FristRadar draws from two sister projects within the Teknora ecosystem: [Invotra
 | **Frontend** | Expo SDK 54 + React Native | None (headless API) | Expo SDK 54 + React Native + Vite landing page |
 | **Backend** | Hono.js on Cloudflare Workers | FastAPI (Python 3.12) | Hono.js on Cloudflare Workers |
 | **Database** | Cloudflare D1 (SQLite) via Drizzle ORM | None (stateless) | Cloudflare D1 (SQLite) via Drizzle ORM |
-| **Auth** | Custom JWT (jose) + OTP (email/SMS) | RSA-signed license keys | Custom JWT (jose) + OTP (email/SMS) |
+| **Auth** | Custom JWT (jose) + password + SMS OTP | RSA-signed license keys | Custom JWT (jose) + OTP (email/SMS) |
 | **LLM primary** | Claude Sonnet 4.6 (native PDF) | Claude Sonnet 4.6 (native PDF) | None |
 | **LLM secondary** | Gemini 2.5 Flash (Vertex AI EU) | GPT-4o | None |
 | **LLM self-hosted** | Qwen2.5-VL via Ollama (v2) | Qwen2.5-VL via Ollama (production) | None |
@@ -172,7 +172,7 @@ FristRadar draws from two sister projects within the Teknora ecosystem: [Invotra
 | **Push** | Expo Push (deadline reminders) | N/A | Expo Push (check-in alerts, escalations) |
 | **Email / SMS** | Not yet | N/A | Resend (email) + Twilio (SMS) |
 | **Calendar** | expo-calendar + .ics export | N/A | N/A |
-| **i18n** | German only (MVP) | N/A | i18next (multi-language) |
+| **i18n** | German + English (MVP), Arabic later | N/A | i18next (multi-language) |
 | **Mobile payments** | RevenueCat (App Store + Play Store) | License-based (RSA-signed) | react-native-iap (Apple IAP + Google Play) |
 | **Web payments** | Stripe (SEPA) | Per-domain license | PayPal Subscriptions |
 | **Hosting** | Cloudflare Workers (EU) | Docker Compose / Windows service | Cloudflare Workers (edge) |
@@ -194,7 +194,7 @@ FristRadar draws from two sister projects within the Teknora ecosystem: [Invotra
 | **Expo + React Native patterns** | -- | Same SDK 54, same Expo Router 6 |
 | **Hono.js on Cloudflare Workers** | -- | Same framework + platform, identical deployment model |
 | **Cloudflare D1 + Drizzle ORM** | -- | Same database + ORM stack, shared schema patterns |
-| **Custom JWT (jose) + OTP** | -- | Same auth architecture, passwordless login flow |
+| **Custom JWT (jose) + password + SMS OTP** | -- | Auth architecture adapted: phone+password login, OTP for verification/reset |
 | **TanStack Query** | -- | Server state pattern for data fetching/caching |
 | **Push notification escalation** | -- | Expo Push with escalation logic (adaptable for T-7/T-3/T-1 alerts) |
 | **Monorepo structure** | -- | pnpm workspaces with shared types |

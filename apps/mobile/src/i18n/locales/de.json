@@ -1,0 +1,72 @@
+{
+  "brand": {
+    "name": "FristRadar",
+    "tagline": "Behoerdenpost im Griff."
+  },
+  "common": {
+    "error": "Etwas ist schiefgelaufen",
+    "loading": "Laden...",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "required": "(erforderlich)",
+    "back": "Zurueck",
+    "continue": "Weiter",
+    "done": "Fertig"
+  },
+  "auth": {
+    "setupPassword": {
+      "title": "Passwort einrichten",
+      "subtitle": "Dieses Passwort wird bei jedem Start der App abgefragt",
+      "passwordLabel": "Passwort",
+      "passwordPlaceholder": "Passwort eingeben",
+      "confirmLabel": "Passwort bestaetigen",
+      "confirmPlaceholder": "Passwort wiederholen",
+      "error": {
+        "passwordRequired": "Passwort ist erforderlich",
+        "passwordMinLength": "Passwort muss mindestens 4 Zeichen lang sein",
+        "passwordsNoMatch": "Passwoerter stimmen nicht ueberein"
+      }
+    },
+    "unlock": {
+      "title": "Willkommen zurueck",
+      "subtitle": "Gib dein Passwort ein, um fortzufahren",
+      "passwordLabel": "Passwort",
+      "passwordPlaceholder": "Passwort eingeben",
+      "button": "Entsperren",
+      "error": {
+        "passwordRequired": "Passwort ist erforderlich",
+        "wrongPassword": "Falsches Passwort"
+      }
+    }
+  },
+  "onboarding": {
+    "language": {
+      "title": "Sprache waehlen",
+      "subtitle": "Du kannst dies spaeter in den Einstellungen aendern"
+    },
+    "welcome": {
+      "title": "Willkommen bei FristRadar",
+      "subtitle": "Dein Behoerdenpost-Assistent",
+      "getStarted": "Los geht's"
+    }
+  },
+  "tabs": {
+    "letters": "Briefe",
+    "calendar": "Kalender",
+    "settings": "Einstellungen"
+  },
+  "settings": {
+    "lockApp": "App sperren"
+  },
+  "home": {
+    "title": "Meine Briefe",
+    "empty": "Noch keine Briefe gescannt",
+    "scan": "Brief scannen"
+  },
+  "api": {
+    "errors": {
+      "serverError": "Serverfehler ({{status}})",
+      "network": "Netzwerkfehler. Bitte pruefe deine Verbindung."
+    }
+  }
+}

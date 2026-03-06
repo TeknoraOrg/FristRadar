@@ -1,0 +1,30 @@
+{
+  "name": "fristradar",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:api": "pnpm --filter @fristradar/api dev",
+    "dev:mobile": "pnpm --filter @fristradar/mobile start:offline",
+    "build:api": "pnpm --filter @fristradar/api build",
+    "build:shared": "pnpm --filter @fristradar/shared build",
+    "deploy:api": "pnpm --filter @fristradar/api deploy",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "test:mobile": "pnpm --filter @fristradar/mobile test"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    }
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.0"
+}
